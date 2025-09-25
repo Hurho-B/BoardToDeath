@@ -36,6 +36,16 @@ public class RayCastController : MonoBehaviour
 
             boardRB.AddForce(transform.forward * kickoffSpeed);
         }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            transform.Rotate(new Vector3 (0,1,0), Space.Self);
+        }
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            transform.Rotate(new Vector3(0, -1, 0), Space.Self);
+        }
     }
 
     public void NormalForces()
