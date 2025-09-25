@@ -36,6 +36,8 @@ public class RayCastController : MonoBehaviour
             boardRB.AddForce(Vector3.up * ollieForce, ForceMode.Impulse);
             //boardRB.AddForceAtPosition(transform.up * ollieForce, forcePoint.transform.position);
         }
+
+
     }
 
     void FixedUpdate()
@@ -61,7 +63,7 @@ public class RayCastController : MonoBehaviour
             if (Physics.Raycast(wheelPosition, Vector3.down, out hit, length))
             {
                 Debug.DrawRay(wheelPosition, Vector3.down * hit.distance, Color.yellow);
-                Debug.Log(hit.distance);
+                //Debug.Log(hit.distance);
 
                 float forceAmount = HooksLawDampen(hit.distance);
                 boardRB.AddForceAtPosition(Vector3.up * forceAmount, wheelPosition);
