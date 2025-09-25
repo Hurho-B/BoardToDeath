@@ -587,9 +587,10 @@ GameObject:
   - component: {fileID: 588699244}
   - component: {fileID: 588699243}
   - component: {fileID: 588699242}
+  - component: {fileID: 588699245}
   m_Layer: 0
   m_Name: Spline
-  m_TagString: Untagged
+  m_TagString: Rail
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -824,6 +825,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &588699245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 588699241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5ee3bc715dd3640b0b57fdbb771bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RailScript
+  normalDir: 0
+  railSpline: {fileID: 588699243}
+  totalSplineLength: 0
 --- !u!1 &624606320
 GameObject:
   m_ObjectHideFlags: 0
@@ -1141,7 +1157,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1795457881583000811, guid: 3e61bd316e2758c4cb057112177476a5, type: 3}
       propertyPath: upForce
-      value: 9.81
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1795457881583000811, guid: 3e61bd316e2758c4cb057112177476a5, type: 3}
       propertyPath: strength
@@ -1153,7 +1169,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1795457881583000811, guid: 3e61bd316e2758c4cb057112177476a5, type: 3}
       propertyPath: ollieForce
-      value: 3.5
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 1795457881583000811, guid: 3e61bd316e2758c4cb057112177476a5, type: 3}
       propertyPath: torqueForce
@@ -1169,7 +1185,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8776140434713074291, guid: 3e61bd316e2758c4cb057112177476a5, type: 3}
       propertyPath: m_Mass
-      value: 15
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8776140434713074291, guid: 3e61bd316e2758c4cb057112177476a5, type: 3}
       propertyPath: m_UseGravity
