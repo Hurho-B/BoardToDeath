@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -7,6 +8,7 @@ public class RayCastController : MonoBehaviour
     public GameObject[] wheelPoints = new GameObject[4];
 
     public float kickoffSpeed;
+    public float torqueForce;
     public float maxSpeed;
     public float upForce = 9.81f;
 
@@ -17,23 +19,32 @@ public class RayCastController : MonoBehaviour
     private float lastHitDist;
     private float hitDistance;
 
+    
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         boardRB = GetComponent<Rigidbody>();
     }
-
-    // Update is called once per frame
     void FixedUpdate()
     {
+        NormalForces();
         SetHeight();
 
         if (Input.GetKey(KeyCode.W))
         {
 
-            boardRB.linearVelocity = new Vector3(0, 0, 1);
+            boardRB.AddForce(transform.forward * kickoffSpeed);
         }
-        
+    }
+
+    public void NormalForces()
+    {
+        boardRB.AddForceAtPosition(upForce * boardRB.mass * Vector3.up, boardRB.centerOfMass);
+    }
+
+    public void SetHeight()
+    {
         RaycastHit hit;
 
         for (int i = 0; i < wheelPoints.Length; i++)
@@ -45,34 +56,22 @@ public class RayCastController : MonoBehaviour
                 Debug.DrawRay(wheelPosition, Vector3.down * hit.distance, Color.yellow);
                 Debug.Log(hit.distance);
 
-                hitDistance = hit.distance;
-
-                float spring = strength * (length - hit.distance) / length;
-                float damper = dampening * (lastHitDist - hitDistance);
-
-                float forceAmount = spring + damper;
-
+                float forceAmount = HooksLawDampen(hit.distance);
                 boardRB.AddForceAtPosition(Vector3.up * forceAmount, wheelPosition);
-
-                lastHitDist = hitDistance;
-
-
-                //float forceAmount = 0;
-
-                //forceAmount = strength * (length - hit.distance) / length + (dampening * (lastHitDist - hitDistance));
-                //boardRB.AddForceAtPosition(Vector3.up * forceAmount, wheelPosition);
-
-                //lastHitDist = hitDistance;
             }
             else
             {
-                lastHitDist = length;
+                lastHitDist = length * 1.1f;
             }
         }
     }
 
-    public void SetHeight()
+    private float HooksLawDampen(float hitDistance)
     {
-        boardRB.AddForceAtPosition(upForce * boardRB.mass * Vector3.up, boardRB.centerOfMass);
+        float forceAmount = strength * (length - hitDistance) + (dampening * (lastHitDist - hitDistance));
+        forceAmount = Mathf.Max(0f, forceAmount);
+        lastHitDist = hitDistance;
+
+        return forceAmount;
     }
 }
