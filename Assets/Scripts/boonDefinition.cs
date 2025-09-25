@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class boonDefinition : MonoBehaviour
 {
-
     public class Boon
     {
         public string Mechanic;
@@ -18,30 +17,23 @@ public class boonDefinition : MonoBehaviour
             Modifier = modifier;
         }
     }
-
-    Hashtable rarityWeight = new Hashtable();
-
     //                              Mechanic       Rarity   Modifier
-    Boon speedWheels    = new Boon("Top Speed",   "Common", 1.10);
-    Boon springBoard    = new Boon("Ollie Jump",  "Common", 1.10);
-    Boon pointBooaster  = new Boon("Point Gain",  "Rare",   1.10);
-    Boon coolTricks     = new Boon("Crit Power",  "Rare",   1.10);
-    Boon hqHelmet       = new Boon("Recovery",    "Rare",   1.10);
-    Boon ollieOllie     = new Boon("Double Jump", "Epic",   2.00);
+    Boon speedWheels = new Boon("Top Speed", "Common", 1.10);
+    Boon springBoard = new Boon("Ollie Jump", "Common", 1.10);
+    Boon pointBooaster = new Boon("Point Gain", "Rare", 1.10); // Later
+    Boon coolTricks = new Boon("Crit Power", "Rare", 1.10); // Later
+    Boon hqHelmet = new Boon("Recovery", "Rare", 1.10); // Later
+    Boon ollieOllie = new Boon("Double Jump", "Epic", 2.00); // Later
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    // The Rarity will affect how likely a Boon is to show up inbetween
+    // levels. If that Boon is selected, the modifier needs to be sent to
+    // the appropriate stat to multiply it.
+
+    bool enableSpeedWheels()
     {
-        rarityWeight.Add("Common", 0.50);
-        rarityWeight.Add("Rare",   0.35);
-        rarityWeight.Add("Epic",   0.15);
-
-        
+        return false;
+        // When called, enableSpeedWheels will send its modifier to
+        // the player's stat table 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

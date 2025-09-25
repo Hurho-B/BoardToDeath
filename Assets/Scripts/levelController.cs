@@ -7,11 +7,11 @@ public class levelController : MonoBehaviour
 {
     [Header("Objective Settings")]
     [Tooltip("The score needed to finish the level.")]
-    public int targetScore;
+    public long targetScore;
+    [Tooltip("DEBUG: The current score of the player.\nDefault = 0")]
+    public long playerScore;
     [Tooltip("Debug: Amount of time before a combo finishes.")]
     public int comboTime;
-    [Tooltip("DEBUG: The current score of the player.\nDefault = 0")]
-    public int playerScore;
     [Tooltip("How much time will the level have, in seconds.")]
     public float timer = 60.0f;
 
@@ -28,6 +28,10 @@ public class levelController : MonoBehaviour
     public TMP_Text timeUI;
     [Tooltip("Text element to display score.")]
     public TMP_Text scoreUI;
+    [Tooltip("Text element to display # of tricks done in a combo")]
+    public TMP_Text comboUI;
+    [Tooltip("Text element to display the score that will be earned after a combo")]
+    public TMP_Text sumScoreUI;
 
     float comboTimeLeft = 0;
     bool calculatingScore = false;
@@ -38,6 +42,20 @@ public class levelController : MonoBehaviour
     void Start()
     {
         LevelGenerator();
+    }
+
+    void FixedUpdate()
+    {
+        if (timer > 0)
+        { timer -= Time.deltaTime; }
+        else if (timer < 0) 
+        { 
+            timer = 0;
+            timeUI.color = Color.red;
+        }
+        int minutes = Mathf.FloorToInt(timer / 60);
+        int seconds = Mathf.FloorToInt(timer % 60);
+        timeUI.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
     void Update()
@@ -53,6 +71,7 @@ public class levelController : MonoBehaviour
             playerScore += sumScore * scores.Count;
             scores = new List<int>();
         }
+        scoreUI.text = "Score:\n"+ playerScore.ToString();
     }
 
     void CalculateScore(int addedScore)
