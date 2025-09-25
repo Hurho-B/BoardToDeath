@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 6825946377061509001}
   - component: {fileID: 8776140434713074291}
   - component: {fileID: 1795457881583000811}
+  - component: {fileID: -860510787927396701}
   m_Layer: 0
   m_Name: DeathBoard(RayCast)
   m_TagString: Untagged
@@ -241,6 +242,26 @@ MonoBehaviour:
   strength: 0
   length: 0.022
   dampening: 0
+--- !u!114 &-860510787927396701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6549738615718659371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2579eb84431a49c478db25e63c434085, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerGrind
+  jump: 0
+  input: {x: 0, y: 0, z: 0}
+  onRail: 0
+  grindSpeed: 0
+  heightOffset: 0
+  timeForFullSpline: 0
+  elapsedTime: 0
+  lerpSpeed: 0
 --- !u!1 &6761392749658418812
 GameObject:
   m_ObjectHideFlags: 0
