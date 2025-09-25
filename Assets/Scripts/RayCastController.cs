@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class PlayerController : MonoBehaviour
+public class RayCastController : MonoBehaviour
 {
     public Rigidbody boardRB;
     public GameObject[] wheelPoints = new GameObject[4];
