@@ -49,7 +49,7 @@ public class RayCastController : MonoBehaviour
 
     public void NormalForces()
     {
-        boardRB.AddForceAtPosition(upForce * boardRB.mass * Vector3.up, boardRB.centerOfMass);
+        boardRB.AddForce(upForce * boardRB.mass * Vector3.up);
     }
 
     public void SetHeight()
