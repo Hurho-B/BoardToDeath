@@ -609,7 +609,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1795457881583000811, guid: 3e61bd316e2758c4cb057112177476a5, type: 3}
       propertyPath: length
-      value: 0.5
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 1795457881583000811, guid: 3e61bd316e2758c4cb057112177476a5, type: 3}
       propertyPath: upForce
@@ -621,7 +621,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1795457881583000811, guid: 3e61bd316e2758c4cb057112177476a5, type: 3}
       propertyPath: dampening
-      value: 10
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1795457881583000811, guid: 3e61bd316e2758c4cb057112177476a5, type: 3}
+      propertyPath: ollieForce
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1795457881583000811, guid: 3e61bd316e2758c4cb057112177476a5, type: 3}
+      propertyPath: torqueForce
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 6549738615718659371, guid: 3e61bd316e2758c4cb057112177476a5, type: 3}
       propertyPath: m_Name

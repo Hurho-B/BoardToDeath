@@ -232,8 +232,15 @@ MonoBehaviour:
   - {fileID: 4035767819339516218}
   - {fileID: 2298198875384294380}
   - {fileID: 6761392749658418812}
+  forcePoint: {fileID: 7472300297444428355}
   kickoffSpeed: 10
+  torqueForce: 0
   maxSpeed: 20
+  ollieForce: 30
+  upForce: 9.81
+  strength: 0
+  length: 0.022
+  dampening: 0
 --- !u!1 &6761392749658418812
 GameObject:
   m_ObjectHideFlags: 0

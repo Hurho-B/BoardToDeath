@@ -6,10 +6,12 @@ public class RayCastController : MonoBehaviour
 {
     public Rigidbody boardRB;
     public GameObject[] wheelPoints = new GameObject[4];
+    public GameObject forcePoint;
 
     public float kickoffSpeed;
     public float torqueForce;
     public float maxSpeed;
+    public float ollieForce = 30f;
     public float upForce = 9.81f;
 
     public float strength = 0f;
@@ -26,26 +28,21 @@ public class RayCastController : MonoBehaviour
     {
         boardRB = GetComponent<Rigidbody>();
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            boardRB.AddForce(Vector3.up * ollieForce, ForceMode.Impulse);
+            //boardRB.AddForceAtPosition(transform.up * ollieForce, forcePoint.transform.position);
+        }
+    }
+
     void FixedUpdate()
     {
         NormalForces();
         SetHeight();
-
-        if (Input.GetKey(KeyCode.W))
-        {
-
-            boardRB.AddForce(transform.forward * kickoffSpeed);
-        }
-
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.Rotate(new Vector3 (0,1,0), Space.Self);
-        }
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.Rotate(new Vector3(0, -1, 0), Space.Self);
-        }
+        Movement();
     }
 
     public void NormalForces()
@@ -73,6 +70,24 @@ public class RayCastController : MonoBehaviour
             {
                 lastHitDist = length * 1.1f;
             }
+        }
+    }
+    public void Movement()
+    {
+        if (Input.GetKey(KeyCode.W))
+        {
+
+            boardRB.AddForce(transform.forward * kickoffSpeed);
+        }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            transform.Rotate(new Vector3(0, 1, 0), Space.Self);
+        }
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            transform.Rotate(new Vector3(0, -1, 0), Space.Self);
         }
     }
 

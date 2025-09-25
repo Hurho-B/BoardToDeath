@@ -24,7 +24,7 @@ public class SphereController : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.W))
         {
-            skateboardRB.AddForceAtPosition(transform.forward * forwardForce, transform.position + Vector3.down * 0.2f);
+            skateboardRB.AddForce(transform.forward * forwardForce);
         }
 
 
