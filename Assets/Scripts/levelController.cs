@@ -35,7 +35,7 @@ public class levelController : MonoBehaviour
 
     float comboTimeLeft = 0;
     bool calculatingScore = false;
-    List<int> scores;
+    List<int> scores = new List<int>();
     int sumScore = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -60,24 +60,33 @@ public class levelController : MonoBehaviour
 
     void Update()
     {
+        int tempScore = 50;
+        // KeyBind calling CalculateScore
+        if (Input.GetKeyDown(KeyCode.R))
+        { CalculateScore(tempScore); }
         if (comboTimeLeft > 0.0 && calculatingScore)
         { comboTimeLeft -= Time.deltaTime; }
         else if (calculatingScore)
         {
             calculatingScore = false;
-
             foreach (int score in scores)
             { sumScore += score; }
-            playerScore += sumScore * scores.Count;
-            scores = new List<int>();
+
+            sumScore *= scores.Count;
+            playerScore += sumScore;
+
+            sumScore = 0;
+            scores.Clear();
         }
-        scoreUI.text = "Score:\n"+ playerScore.ToString();
+        scoreUI.text = "Score:\n" + playerScore.ToString();
     }
 
     void CalculateScore(int addedScore)
     {
         scores.Add(addedScore);
         comboTimeLeft = comboTime;
+        calculatingScore = true;
+        print(scores.Count);
     }
 
     void LevelGenerator()
