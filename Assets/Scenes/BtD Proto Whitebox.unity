@@ -26533,7 +26533,7 @@ GameObject:
   - component: {fileID: 1478218658}
   - component: {fileID: 1478218657}
   m_Layer: 0
-  m_Name: w
+  m_Name: FenceRustyDemo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31021,6 +31021,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1202940313783759187, guid: 68a2221b3902cc5458b9ec3cebf9a896, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 56f9a82893e6a6b4ab189f7ed18f9dc7, type: 2}
     - target: {fileID: 1486060875907618079, guid: 68a2221b3902cc5458b9ec3cebf9a896, type: 3}
       propertyPath: m_Name
       value: WarehouseShelf
