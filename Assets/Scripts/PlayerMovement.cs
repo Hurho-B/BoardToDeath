@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode boonKey = KeyCode.L;
+    public KeyCode boonResetKey = KeyCode.M;
 
     [Header("Ground Check")]
     public float playerHeight;
@@ -84,6 +85,13 @@ public class PlayerMovement : MonoBehaviour
         {
             airMultiplier = 0.5f;
             jumpForce = 15;
+        }
+
+        //undo moon jump
+        if(Input.GetKey(boonResetKey))
+        {
+            airMultiplier = 0.2f;
+            jumpForce = 7;
         }
     }
 
