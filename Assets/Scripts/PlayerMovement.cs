@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
+    public KeyCode controllerJumpKey = KeyCode.JoystickButton14;
     public KeyCode boonKey = KeyCode.L;
     public KeyCode boonResetKey = KeyCode.M;
 
@@ -43,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         //checking if on ground
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+        grounded = Physics.Raycast(transform.position, Vector3.down, whatIsGround);
 
         MyInput();
         SpeedControl();
@@ -71,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
         verticalInput = Input.GetAxisRaw("Vertical");
         
         //jump ability
-        if(Input.GetKey(jumpKey) && readyToJump && grounded)
+        if((Input.GetKey(jumpKey) || Input.GetKey(controllerJumpKey)) && readyToJump && grounded)
         {
             readyToJump = false;
 
