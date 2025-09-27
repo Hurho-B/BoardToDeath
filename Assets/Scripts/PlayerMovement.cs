@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
-    bool readyToJump;
+    bool readyToJump = true;
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -48,9 +48,14 @@ public class PlayerMovement : MonoBehaviour
 
         //drag on ground vs drag in the air
         if (grounded)
+            {
             rb.linearDamping = groundDrag;
+            Debug.Log("Grounded");
+            }
         else
+            {
             rb.linearDamping = 0;
+            }
     }
 
     void FixedUpdate()
@@ -62,7 +67,7 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-
+        
         //jump ability
         if(Input.GetKey(jumpKey) && readyToJump && grounded)
         {
@@ -106,6 +111,8 @@ public class PlayerMovement : MonoBehaviour
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+
+        Debug.Log("Jumped");
     }
 
     void ResetJump()
