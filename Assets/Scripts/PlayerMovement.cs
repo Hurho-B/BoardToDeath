@@ -24,8 +24,13 @@ public class PlayerMovement : MonoBehaviour
     public float playerHeight;
     public LayerMask whatIsGround;
     bool grounded;
+    public bool isGrounded;
 
     public Transform orientation;
+    
+    [Header("Animations")]
+    public Animator trickAnimations;
+    public bool isJumping;
 
     float horizontalInput;
     float verticalInput;
@@ -53,11 +58,13 @@ public class PlayerMovement : MonoBehaviour
         if (grounded)
             {
             rb.linearDamping = groundDrag;
-            Debug.Log("Grounded");
+            isGrounded = true;
+            //Debug.Log("Grounded");
             }
         else
             {
             rb.linearDamping = 0;
+            isGrounded = false;
             }
     }
 
@@ -126,6 +133,8 @@ public class PlayerMovement : MonoBehaviour
     {
         //reset vertical velocity
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+
+        isJumping = true;
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
 

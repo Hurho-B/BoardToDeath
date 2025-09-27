@@ -178,12 +178,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e6c60d3b41c54df40843f133543b3aa8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1237284987}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e6c60d3b41c54df40843f133543b3aa8, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1237284989}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e6c60d3b41c54df40843f133543b3aa8, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1237284988}
     - targetCorrespondingSourceObject: {fileID: 7036213049465896255, guid: e6c60d3b41c54df40843f133543b3aa8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 314813988}
@@ -18543,10 +18537,8 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
-  isGrounded: 0
   orientation: {fileID: 834959849}
   trickAnimations: {fileID: 0}
-  isJumping: 0
 --- !u!4 &771494602 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c3e9f69079b91c646a43f108165832e5, type: 3}
@@ -19072,7 +19064,6 @@ GameObject:
   - component: {fileID: 911319060}
   - component: {fileID: 911319058}
   - component: {fileID: 911319061}
-  - component: {fileID: 911319062}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -19105,10 +19096,8 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
-  isGrounded: 0
   orientation: {fileID: 2037958300}
   trickAnimations: {fileID: 0}
-  isJumping: 0
 --- !u!4 &911319059
 Transform:
   m_ObjectHideFlags: 0
@@ -19161,7 +19150,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 911319057}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 04cb7331cff755144b32a897dc938081, type: 2}
   m_CullingMode: 0
@@ -19175,20 +19164,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &911319062
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 911319057}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c098904ea6ab14469da5e39145e305c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Tricks
-  playerMovement: {fileID: 911319058}
-  trickAnimations: {fileID: 911319061}
 --- !u!1 &918934479
 GameObject:
   m_ObjectHideFlags: 0
@@ -21059,42 +21034,6 @@ CapsuleCollider:
   m_Height: 1.69
   m_Direction: 1
   m_Center: {x: 0, y: 0.82, z: 0}
---- !u!114 &1237284988
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1086153675}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c098904ea6ab14469da5e39145e305c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Tricks
-  playerMovement: {fileID: 911319058}
-  trickAnimations: {fileID: 1237284989}
---- !u!95 &1237284989
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1086153675}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 04cb7331cff755144b32a897dc938081, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!43 &1259433719
 Mesh:
   m_ObjectHideFlags: 0
