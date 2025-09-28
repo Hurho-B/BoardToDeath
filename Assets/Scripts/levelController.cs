@@ -34,11 +34,13 @@ public class levelController : MonoBehaviour
     public TMP_Text comboUI;
     [Tooltip("Text element to display the score that will be earned after a combo")]
     public TMP_Text sumScoreUI;
+    [Tooltip("Menu to look at Boons.")]
+    public GameObject boonOptions;
 
-    private float comboTimeLeft = 0;
-    private bool calculatingScore = false;
-    private List<int> scores = new List<int>();
-    private int sumScore = 0;
+    float comboTimeLeft = 0;
+    bool calculatingScore = false;
+    List<int> scores = new List<int>();
+    int sumScore = 0;
     public class Cell
     {
         public bool visited = false;
@@ -50,6 +52,7 @@ public class levelController : MonoBehaviour
     void Start()
     {
         LevelGenerator();
+        boonOptions.SetActive(false);
     }
 
     void FixedUpdate()
@@ -68,10 +71,16 @@ public class levelController : MonoBehaviour
 
     void Update()
     {
+        bool isBoonMenuActive = boonOptions.activeSelf;
+        BoonMenu(isBoonMenuActive);
         int tempScore = 50;
+
         // KeyBind calling CalculateScore
         if (Input.GetKeyDown(KeyCode.R))
         { CalculateScore(tempScore); }
+
+        // This math will not run until no more scores
+        // are being added to the combo
         if (comboTimeLeft > 0.0 && calculatingScore)
         { comboTimeLeft -= Time.deltaTime; }
         else if (calculatingScore)
@@ -88,10 +97,10 @@ public class levelController : MonoBehaviour
         }
         scoreUI.text = "Score:\n" + playerScore.ToString();
 
+        // Deletes the existing list + gameObjects
+        // Generates a new dungeon
         if (Input.GetKeyDown(KeyCode.T))
         {
-            // Deletes the existing list + gameObjects
-            // Generates a new dungeon
             board.Clear();
             for (int i = (transform.childCount - 1); i >= 0; i--)
             {
@@ -100,6 +109,23 @@ public class levelController : MonoBehaviour
             }
             LevelGenerator();
         }
+
+        // Enables Boon Menu
+        if (Input.GetKeyDown(KeyCode.M))
+        { boonOptions.SetActive(!isBoonMenuActive); }
+    }
+
+    void BoonMenu(bool active)
+    {
+        if (!active)
+            return;
+
+        // Full implementation requires
+
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        { }
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+        {  }
     }
 
     void CalculateScore(int addedScore)
