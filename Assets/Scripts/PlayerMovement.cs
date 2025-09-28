@@ -31,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Animations")]
     public Animator trickAnimations;
     public bool isJumping;
+    public bool manny;
 
     float horizontalInput;
     float verticalInput;
@@ -66,13 +67,27 @@ public class PlayerMovement : MonoBehaviour
         else
             {
             rb.linearDamping = 0;
-            isJumping = true;
             }
 
-        //Kickflip Trick
-        if((Input.GetKey(kickflip) && !grounded))
+        if (readyToJump == false)
         {
-            trickAnimations.SetTrigger("kick");
+            isJumping = true;
+        }
+
+        //manual
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+           manny = true;
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            manny = false;
+        }
+
+        //Kickflip Trick
+        if (Input.GetKey(kickflip))
+        {
+            //kick = true;
         }
     }
 
