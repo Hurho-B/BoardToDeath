@@ -19,12 +19,12 @@ public class PlayerMovement : MonoBehaviour
     public KeyCode controllerJumpKey = KeyCode.JoystickButton14;
     public KeyCode boonKey = KeyCode.L;
     public KeyCode boonResetKey = KeyCode.M;
+    public KeyCode kickflip = KeyCode.Mouse1;
 
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask whatIsGround;
-    bool grounded;
-    public bool isGrounded;
+    public bool grounded;
 
     public Transform orientation;
     
@@ -44,12 +44,14 @@ public class PlayerMovement : MonoBehaviour
         //Assign RigidBody and freeze rotations to prevent falling through floor
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+
+        trickAnimations = gameObject.GetComponent<Animator>();
     }
 
     void Update()
     {
         //checking if on ground
-        grounded = Physics.Raycast(transform.position, Vector3.down, whatIsGround);
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
         MyInput();
         SpeedControl();
@@ -58,14 +60,20 @@ public class PlayerMovement : MonoBehaviour
         if (grounded)
             {
             rb.linearDamping = groundDrag;
-            isGrounded = true;
+            isJumping = false;
             //Debug.Log("Grounded");
             }
         else
             {
             rb.linearDamping = 0;
-            isGrounded = false;
+            isJumping = true;
             }
+
+        //Kickflip Trick
+        if((Input.GetKey(kickflip) && !grounded))
+        {
+            trickAnimations.SetTrigger("kick");
+        }
     }
 
     void FixedUpdate()
@@ -133,8 +141,6 @@ public class PlayerMovement : MonoBehaviour
     {
         //reset vertical velocity
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-
-        isJumping = true;
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
 

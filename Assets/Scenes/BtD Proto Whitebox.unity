@@ -18539,11 +18539,12 @@ MonoBehaviour:
   controllerJumpKey: 344
   boonKey: 108
   boonResetKey: 109
+  kickflip: 324
   playerHeight: 0
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
-  isGrounded: 0
+  grounded: 0
   orientation: {fileID: 834959849}
   trickAnimations: {fileID: 0}
   isJumping: 0
@@ -19072,7 +19073,6 @@ GameObject:
   - component: {fileID: 911319060}
   - component: {fileID: 911319058}
   - component: {fileID: 911319061}
-  - component: {fileID: 911319062}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -19101,14 +19101,15 @@ MonoBehaviour:
   controllerJumpKey: 344
   boonKey: 108
   boonResetKey: 109
+  kickflip: 324
   playerHeight: 0
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
-  isGrounded: 0
+  grounded: 0
   orientation: {fileID: 2037958300}
-  trickAnimations: {fileID: 0}
-  isJumping: 0
+  trickAnimations: {fileID: 911319061}
+  isJumping: 1
 --- !u!4 &911319059
 Transform:
   m_ObjectHideFlags: 0
@@ -19161,7 +19162,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 911319057}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 04cb7331cff755144b32a897dc938081, type: 2}
   m_CullingMode: 0
@@ -19175,20 +19176,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &911319062
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 911319057}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c098904ea6ab14469da5e39145e305c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Tricks
-  playerMovement: {fileID: 911319058}
-  trickAnimations: {fileID: 911319061}
 --- !u!1 &918934479
 GameObject:
   m_ObjectHideFlags: 0

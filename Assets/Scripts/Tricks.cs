@@ -13,7 +13,7 @@ public class Tricks : MonoBehaviour
 
     void Update()
     {
-        trickAnimations.SetBool("isGrounded", playerMovement.isGrounded);
+        trickAnimations.SetBool("grounded", playerMovement.grounded);
         trickAnimations.SetBool("isJumping", playerMovement.isJumping);
     }
 }
