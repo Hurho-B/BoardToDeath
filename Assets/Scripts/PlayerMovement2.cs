@@ -1,5 +1,3 @@
-using System.Net.NetworkInformation;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem; 
 
@@ -8,13 +6,9 @@ public class PlayerMovement2 : MonoBehaviour
     public InputActionAsset InputActions;
 
     public InputAction moveAction;
-    public InputAction lookAction;
     public InputAction jumpAction;
-    public InputAction manualAction;
-    public InputAction kickflipAction;
 
     public Vector2 moveAmount;
-    public Vector2 lookAmount;
 
     public Rigidbody rb;
 
@@ -26,8 +20,9 @@ public class PlayerMovement2 : MonoBehaviour
     public float distanceFromGround;
     public bool isGrounded;
 
-    private void OnEnable()
+    private void Awake()
     {
+        rb = GetComponent<Rigidbody>();
         InputActions.FindActionMap("Player").Enable();
     }
 
@@ -38,20 +33,17 @@ public class PlayerMovement2 : MonoBehaviour
 
     private void Start()
     {
-        moveAction = InputSystem.actions.FindAction("Move");
-        lookAction = InputSystem.actions.FindAction("Look");
-        jumpAction = InputSystem.actions.FindAction("Jump");
-        manualAction = InputSystem.actions.FindAction("Manual");
-        kickflipAction = InputSystem.actions.FindAction("Kickflip");
 
-        rb = GetComponent<Rigidbody>();
+        moveAction = InputSystem.actions.FindAction("Move");
+        jumpAction = InputSystem.actions.FindAction("Jump");
+
+
         rb.freezeRotation = true;
     }
 
     private void Update()
     {
         moveAmount = moveAction.ReadValue<Vector2>();
-        lookAmount = lookAction.ReadValue<Vector2>();
 
         if (distanceFromGround <= 1.00f)
         {
@@ -63,12 +55,6 @@ public class PlayerMovement2 : MonoBehaviour
                 Jump();
                 isGrounded = false;
         }
-
-        if (kickflipAction.WasPressedThisFrame())
-        {
-            Kickflip();
-        }
-
     }
 
     private void FixedUpdate()
@@ -84,9 +70,7 @@ public class PlayerMovement2 : MonoBehaviour
 
     public void Jump()
     {
-        {
             rb.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
-        }
     }
 
     public void Moving()
@@ -94,17 +78,20 @@ public class PlayerMovement2 : MonoBehaviour
         float horizontal = moveAmount.x;
         float vertical = moveAmount.y;
 
-        //Vector3 camForward = Camera.main.transform.forward;
-        //Vector3 camRight = Camera.main.transform.right;
+        // Get camera directions, but ignore vertical tilt
+        Vector3 camForward = Camera.main.transform.forward;
+        Vector3 camRight = Camera.main.transform.right;
 
-        //camForward.y = 0f;
-        //camRight.y = 0f;
+        camForward.y = 0f;
+        camRight.y = 0f;
 
-        //camForward.Normalize();
-        //camRight.Normalize();
+        camForward.Normalize();
+        camRight.Normalize();
 
-        Vector3 moveDirection =  new Vector3(horizontal, 0, vertical).normalized;
+        // Movement relative to camera
+        Vector3 moveDirection = (camForward * vertical + camRight * horizontal).normalized;
 
+        // Apply movement
         rb.MovePosition(rb.position + moveDirection * movementSpeed * Time.deltaTime);
 
         if (moveDirection != Vector3.zero)
@@ -113,16 +100,4 @@ public class PlayerMovement2 : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotateSpeed * Time.deltaTime);
         }
     }
-
-    public void Rotating()
-    {
-
-    }
-
-    public void Kickflip()
-    {
-        Debug.Log("Kickflip Performed");
-    }
-
-
 }
