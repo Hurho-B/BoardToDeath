@@ -6,10 +6,12 @@ public class SliderScripts : MonoBehaviour
     public Slider thisSlider;
     public float sliderSpeed;
     public bool performingManual = false;
+    public FailState failState;
 
     public void Start()
     {
         Debug.Log(thisSlider.value);
+        failState = GetComponent<FailState>();
     }
 
     // Update is called once per frame
@@ -34,6 +36,7 @@ public class SliderScripts : MonoBehaviour
             {
                 thisSlider.value = 0;
                 performingManual = false;
+                failState.isDead = true;
             }
         }
     }
