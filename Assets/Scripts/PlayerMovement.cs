@@ -53,6 +53,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //checking if on ground
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+        CheckIfOnGround();
 
         MyInput();
         SpeedControl();
@@ -165,5 +166,19 @@ public class PlayerMovement : MonoBehaviour
     void ResetJump()
     {
         readyToJump = true;
+    }
+
+    public void CheckIfOnGround()
+    {
+        //detects whether there is a ground below
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.17f))
+        {
+            Vector3 surfaceNormal = hit.normal; //stores normals of surface hit by raycast
+            Quaternion targetRotation = Quaternion.FromToRotation(transform.up, surfaceNormal) * transform.rotation;
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10);
+        }
+
     }
 }
