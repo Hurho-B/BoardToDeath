@@ -77,7 +77,7 @@ public class levelController : MonoBehaviour
     void Update()
     {
         bool isBoonMenuActive = boonOptions.activeSelf;
-        BoonMenu(isBoonMenuActive);
+        // BoonMenu(isBoonMenuActive);
         int tempScore = 50;
 
         // KeyBind calling CalculateScore
@@ -116,8 +116,8 @@ public class levelController : MonoBehaviour
         }
 
         // Enables Boon Menu
-        if (Input.GetKeyDown(KeyCode.M))
-        { boonOptions.SetActive(!isBoonMenuActive); }
+        // if (Input.GetKeyDown(KeyCode.M))
+        // { boonOptions.SetActive(!isBoonMenuActive); }
     }
 
     void BoonMenu(bool active)
