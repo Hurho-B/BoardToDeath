@@ -67,11 +67,11 @@ public class levelController : MonoBehaviour
         {
             timer = 0;
             timeUI.color = Color.red;
+            SceneManager.LoadScene(currentSceneName);
         }
         int minutes = Mathf.FloorToInt(timer / 60);
         int seconds = Mathf.FloorToInt(timer % 60);
         timeUI.text = string.Format("{0:00}:{1:00}", minutes, seconds);
-        SceneManager.LoadScene(currentSceneName);
     }
 
     void Update()
