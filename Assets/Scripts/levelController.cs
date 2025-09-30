@@ -41,6 +41,8 @@ public class levelController : MonoBehaviour
     bool calculatingScore = false;
     List<int> scores = new List<int>();
     int sumScore = 0;
+    string currentSceneName = SceneManager.GetActiveScene().name;
+    
     public class Cell
     {
         public bool visited = false;
@@ -67,6 +69,7 @@ public class levelController : MonoBehaviour
         int minutes = Mathf.FloorToInt(timer / 60);
         int seconds = Mathf.FloorToInt(timer % 60);
         timeUI.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        SceneManager.LoadScene(currentSceneName);
     }
 
     void Update()
