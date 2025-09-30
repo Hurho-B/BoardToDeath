@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using TMPro;
 
@@ -41,7 +42,7 @@ public class levelController : MonoBehaviour
     bool calculatingScore = false;
     List<int> scores = new List<int>();
     int sumScore = 0;
-    string currentSceneName = SceneManager.GetActiveScene().name;
+    string currentSceneName;
     
     public class Cell
     {
@@ -55,6 +56,7 @@ public class levelController : MonoBehaviour
     {
         LevelGenerator();
         boonOptions.SetActive(false);
+        string currentSceneName = SceneManager.GetActiveScene().name;
     }
 
     void FixedUpdate()
