@@ -6,9 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed;
-
     public float groundDrag;
-
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
@@ -19,13 +17,19 @@ public class PlayerMovement : MonoBehaviour
     public KeyCode controllerJumpKey = KeyCode.JoystickButton14;
     public KeyCode boonKey = KeyCode.L;
     public KeyCode boonResetKey = KeyCode.M;
+    public KeyCode kickflip = KeyCode.Mouse1;
 
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask whatIsGround;
-    bool grounded;
+    public bool grounded;
 
     public Transform orientation;
+    
+    [Header("Animations")]
+    public Animator trickAnimations;
+    public bool isJumping;
+    public bool manny;
 
     float horizontalInput;
     float verticalInput;
@@ -39,12 +43,15 @@ public class PlayerMovement : MonoBehaviour
         //Assign RigidBody and freeze rotations to prevent falling through floor
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+
+        trickAnimations = gameObject.GetComponent<Animator>();
     }
 
     void Update()
     {
         //checking if on ground
-        grounded = Physics.Raycast(transform.position, Vector3.down, whatIsGround);
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+        CheckIfOnGround();
 
         MyInput();
         SpeedControl();
@@ -53,12 +60,34 @@ public class PlayerMovement : MonoBehaviour
         if (grounded)
             {
             rb.linearDamping = groundDrag;
-            Debug.Log("Grounded");
+            isJumping = false;
+            //Debug.Log("Grounded");
             }
         else
             {
             rb.linearDamping = 0;
             }
+
+        if (readyToJump == false)
+        {
+            isJumping = true;
+        }
+
+        //manual
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+           manny = true;
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            manny = false;
+        }
+
+        //Kickflip Trick
+        if (Input.GetKey(kickflip))
+        {
+            //kick = true;
+        }
     }
 
     void FixedUpdate()
@@ -135,5 +164,19 @@ public class PlayerMovement : MonoBehaviour
     void ResetJump()
     {
         readyToJump = true;
+    }
+
+    public void CheckIfOnGround()
+    {
+        //detects whether there is a ground below
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.17f))
+        {
+            Vector3 surfaceNormal = hit.normal; //stores normals of surface hit by raycast
+            Quaternion targetRotation = Quaternion.FromToRotation(transform.up, surfaceNormal) * transform.rotation;
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10);
+        }
+
     }
 }

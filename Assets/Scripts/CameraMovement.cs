@@ -7,7 +7,7 @@ public class NewMonoBehaviourScript : MonoBehaviour
     //Making the movements of the player public so the camera can reference them
     public Transform orientation;
     public Transform player;
-    public Transform deathboard;
+    public Transform playerModel;
     public Rigidbody rb;
 
     public float rotationSpeed;
@@ -31,7 +31,7 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
         //smoothes camera if there's an input
         if (inputDir != Vector3.zero)
-            deathboard.forward = Vector3.Slerp(deathboard.forward, inputDir.normalized, Time.deltaTime * rotationSpeed);
+            playerModel.forward = Vector3.Slerp(playerModel.forward, inputDir.normalized, Time.deltaTime * rotationSpeed);
     }
 
 }
