@@ -30,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
     public Animator trickAnimations;
     public bool isJumping;
     public bool manny;
+    public bool kick;
 
     float horizontalInput;
     float verticalInput;
@@ -61,6 +62,7 @@ public class PlayerMovement : MonoBehaviour
             {
             rb.linearDamping = groundDrag;
             isJumping = false;
+            kick = false;
             //Debug.Log("Grounded");
             }
         else
@@ -84,9 +86,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Kickflip Trick
-        if (Input.GetKey(kickflip))
+        if (Input.GetKey(kickflip) && !grounded)
         {
-            //kick = true;
+            kick = true;
         }
     }
 
