@@ -56,7 +56,7 @@ public class levelController : MonoBehaviour
     {
         LevelGenerator();
         boonOptions.SetActive(false);
-        string currentSceneName = SceneManager.GetActiveScene().name;
+        currentSceneName = SceneManager.GetActiveScene().name;
     }
 
     void FixedUpdate()
