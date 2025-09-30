@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using TMPro;
 
@@ -41,6 +42,8 @@ public class levelController : MonoBehaviour
     bool calculatingScore = false;
     List<int> scores = new List<int>();
     int sumScore = 0;
+    string currentSceneName;
+    
     public class Cell
     {
         public bool visited = false;
@@ -53,6 +56,7 @@ public class levelController : MonoBehaviour
     {
         LevelGenerator();
         boonOptions.SetActive(false);
+        currentSceneName = SceneManager.GetActiveScene().name;
     }
 
     void FixedUpdate()
@@ -67,12 +71,13 @@ public class levelController : MonoBehaviour
         int minutes = Mathf.FloorToInt(timer / 60);
         int seconds = Mathf.FloorToInt(timer % 60);
         timeUI.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        SceneManager.LoadScene(currentSceneName);
     }
 
     void Update()
     {
         bool isBoonMenuActive = boonOptions.activeSelf;
-        BoonMenu(isBoonMenuActive);
+        // BoonMenu(isBoonMenuActive);
         int tempScore = 50;
 
         // KeyBind calling CalculateScore
@@ -111,8 +116,8 @@ public class levelController : MonoBehaviour
         }
 
         // Enables Boon Menu
-        if (Input.GetKeyDown(KeyCode.M))
-        { boonOptions.SetActive(!isBoonMenuActive); }
+        // if (Input.GetKeyDown(KeyCode.M))
+        // { boonOptions.SetActive(!isBoonMenuActive); }
     }
 
     void BoonMenu(bool active)
