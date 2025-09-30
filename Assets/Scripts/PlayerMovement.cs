@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     public KeyCode boonKey = KeyCode.L;
     public KeyCode boonResetKey = KeyCode.M;
     public KeyCode kickflip = KeyCode.Mouse1;
+    public KeyCode manual = KeyCode.RightShift;
 
     [Header("Ground Check")]
     public float playerHeight;
@@ -30,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
     public Animator trickAnimations;
     public bool isJumping;
     public bool manny;
+    public bool kick;
 
     float horizontalInput;
     float verticalInput;
@@ -61,6 +63,7 @@ public class PlayerMovement : MonoBehaviour
             {
             rb.linearDamping = groundDrag;
             isJumping = false;
+            kick = false;
             //Debug.Log("Grounded");
             }
         else
@@ -74,19 +77,19 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //manual
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(manual))
         {
            manny = true;
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKeyDown(KeyCode.Return))
         {
             manny = false;
         }
 
         //Kickflip Trick
-        if (Input.GetKey(kickflip))
+        if (Input.GetKey(kickflip) && !grounded)
         {
-            //kick = true;
+            kick = true;
         }
     }
 
