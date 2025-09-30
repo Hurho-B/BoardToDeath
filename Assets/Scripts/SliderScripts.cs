@@ -38,6 +38,12 @@ public class SliderScripts : MonoBehaviour
                 performingManual = false;
                 failState.isDead = true;
             }
+
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                thisSlider.value = 0;
+                performingManual = false;
+            }
         }
     }
 }

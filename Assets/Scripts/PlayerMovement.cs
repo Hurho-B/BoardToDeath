@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     public KeyCode boonKey = KeyCode.L;
     public KeyCode boonResetKey = KeyCode.M;
     public KeyCode kickflip = KeyCode.Mouse1;
+    public KeyCode manual = KeyCode.RightShift;
 
     [Header("Ground Check")]
     public float playerHeight;
@@ -76,11 +77,11 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //manual
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(manual))
         {
            manny = true;
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKeyDown(KeyCode.Return))
         {
             manny = false;
         }
