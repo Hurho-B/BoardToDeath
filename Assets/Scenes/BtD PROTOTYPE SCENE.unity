@@ -40364,6 +40364,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2071265781598292483, guid: 8af5e372e79f9224dad548df41a4a48f, type: 3}
+      propertyPath: sliderScripts
+      value: 
+      objectReference: {fileID: 1837590101}
+    - target: {fileID: 3297742953299374660, guid: 8af5e372e79f9224dad548df41a4a48f, type: 3}
+      propertyPath: m_Center.y
+      value: 0.81
+      objectReference: {fileID: 0}
     - target: {fileID: 4670989258347006958, guid: 8af5e372e79f9224dad548df41a4a48f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -43362,7 +43370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineDeoccluder
   CollideAgainst:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 64
   IgnoreTag: Player
   TransparentLayers:
     serializedVersion: 2
