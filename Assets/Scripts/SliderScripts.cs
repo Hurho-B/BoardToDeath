@@ -38,17 +38,17 @@ public class SliderScripts : MonoBehaviour
 
             if (thisSlider.value <= -10 || thisSlider.value >= 10)
             {
-                thisSlider.value = 0;
-                performingManual = false;
-                failState.isDead = true;
                 uiGroup.alpha = 0f;
+                thisSlider.value = 0;
+                failState.isDead = true;
+                performingManual = false;
             }
 
             if (Input.GetKeyDown(KeyCode.Return))
             {
+                uiGroup.alpha = 0f;
                 thisSlider.value = 0;
                 performingManual = false;
-                uiGroup.alpha = 0f;
             }
         }
     }
