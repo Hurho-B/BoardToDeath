@@ -17,5 +17,6 @@ public class Tricks : MonoBehaviour
         trickAnimations.SetBool("grounded", playerMovement.grounded);
         trickAnimations.SetBool("isJumping", playerMovement.isJumping);
         trickAnimations.SetBool("manny", playerMovement.manny);
+        trickAnimations.SetBool("kick", playerMovement.kick);
     }
 }
