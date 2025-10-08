@@ -231,4 +231,22 @@ public class levelController : MonoBehaviour
         return isTouchingEdge;
     }
 
+    bool[] IsBorderingEdges(int cell)
+    {
+        bool[] isTouchingEdge = {false, false, false, false};
+        // Checks North neighbor
+        if (cell - size.x < 0) 
+        { isTouchingEdge[0] = true; }
+        // Checks East neighbor
+        if ((cell + 1) % size.y == 0)
+        { isTouchingEdge[1] = true; }
+        // Checks South neighbor
+        if (cell + size.x > board.Count)
+        { isTouchingEdge[2] = true; }
+        // Checks West neighbor
+        if (cell % size.y == 0)
+        { isTouchingEdge[3] = true; }
+        return isTouchingEdge;
+    }
+
 }
