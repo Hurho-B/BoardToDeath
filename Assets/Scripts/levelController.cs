@@ -19,10 +19,10 @@ public class levelController : MonoBehaviour
     [Header("Generator Settings")]
     [Tooltip("The size of the grid.")]
     public Vector2 size;
-    [Tooltip("The distance between the center of each room.")]
+    [Tooltip("The distance between the center of each module.")]
     public int offset;
-    [Tooltip("The prefab used for the generator.")]
-    public GameObject room;
+    [Tooltip("The prefabs used for the generator.")]
+    public List<GameObject> module;
     [Tooltip("Temp var, which cell to start generator at.")]
     public int startPos = 0;
 
@@ -43,7 +43,7 @@ public class levelController : MonoBehaviour
     List<int> scores = new List<int>();
     int sumScore = 0;
     string currentSceneName;
-    
+
     public class Cell
     {
         public bool visited = false;
@@ -57,6 +57,7 @@ public class levelController : MonoBehaviour
         LevelGenerator();
         boonOptions.SetActive(false);
         currentSceneName = SceneManager.GetActiveScene().name;
+        print(module.Count);
     }
 
     void FixedUpdate()
@@ -125,12 +126,12 @@ public class levelController : MonoBehaviour
         if (!active)
             return;
 
-        // Full implementation requires
+        // Ignore function, to be deleted
 
         if (Input.GetKeyDown(KeyCode.Keypad1))
         { }
         if (Input.GetKeyDown(KeyCode.Keypad2))
-        {  }
+        { }
     }
 
     void CalculateScore(int addedScore)
@@ -145,21 +146,21 @@ public class levelController : MonoBehaviour
     {
         // After LevelGenerator(), new list is brought in
         // and used to make the actual environment/gameObjects
-        for (int i = 0; i < size.x; i++)
-        {
-            for (int j = 0; j < size.y; j++)
-            {
-                Cell currentCell = board[Mathf.FloorToInt(i + j * size.x)];
-                if (currentCell.visited)
-                {
-                    RoomBehaviour newRoom = Instantiate(room, new Vector3(i * offset, 0, -j * offset), Quaternion.identity, transform).GetComponent<RoomBehaviour>();
-                    newRoom.UpdateRoom(currentCell.status);
+        // for (int i = 0; i < size.x; i++)
+        // {
+        //     for (int j = 0; j < size.y; j++)
+        //     {
+        //         Cell currentCell = board[Mathf.FloorToInt(i + j * size.x)];
+        //         if (currentCell.visited)
+        //         {
+        //             RoomBehaviour newRoom = Instantiate(room, new Vector3(i * offset, 0, -j * offset), Quaternion.identity, transform).GetComponent<RoomBehaviour>();
+        //             newRoom.UpdateRoom(currentCell.status);
 
-                    newRoom.name += " " + i + "-" + j;
-                }
-            }
+        //             newRoom.name += " " + i + "-" + j;
+        //         }
+        //     }
 
-        }
+        // }
     }
 
     void LevelGenerator()
@@ -167,9 +168,7 @@ public class levelController : MonoBehaviour
         // Generating the workable area
         board = new List<Cell>();
         for (int i = 0; i < (size.x * size.y); i++)
-        {
-            board.Add(new Cell());
-        }
+        { board.Add(new Cell()); }
 
         for (int i = 0; i < size.x; i++)
         {
@@ -197,7 +196,7 @@ public class levelController : MonoBehaviour
                 if (neighbors.Count == 0)
                 {
                     if (path.Count == 0)
-                    {   
+                    {
                         break;
                     }
                     else
@@ -247,7 +246,7 @@ public class levelController : MonoBehaviour
         }
         GenerateLevel();
     }
-    
+
     List<int> CheckNeighbors(int cell)
     {
         List<int> neighbors = new List<int>();
@@ -265,6 +264,24 @@ public class levelController : MonoBehaviour
         { neighbors.Add(Mathf.FloorToInt(cell - 1)); }
         // Returns a list of valid neighbors (board indexes) to steer into
         return neighbors;
+    }
+
+    bool[] IsBorderingEdges(int cell)
+    {
+        bool[] isTouchingEdge = {false, false, false, false};
+        // Checks North neighbor
+        if (cell - size.x < 0) 
+        { isTouchingEdge[0] = true; }
+        // Checks East neighbor
+        if ((cell + 1) % size.y == 0)
+        { isTouchingEdge[1] = true; }
+        // Checks South neighbor
+        if (cell + size.x > board.Count)
+        { isTouchingEdge[2] = true; }
+        // Checks West neighbor
+        if (cell % size.y == 0)
+        { isTouchingEdge[3] = true; }
+        return isTouchingEdge;
     }
 
 }

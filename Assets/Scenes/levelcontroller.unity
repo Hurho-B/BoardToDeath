@@ -1018,6 +1018,14 @@ PrefabInstance:
       propertyPath: boonOptions
       value: 
       objectReference: {fileID: 1620773532}
+    - target: {fileID: -7565130894151383419, guid: 736231d04df351bac81fa7d690b1e8e8, type: 3}
+      propertyPath: module.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -7565130894151383419, guid: 736231d04df351bac81fa7d690b1e8e8, type: 3}
+      propertyPath: 'module.Array.data[0]'
+      value: 
+      objectReference: {fileID: 5459409631863508603, guid: 8b2bef5208577cef5bed1049686e21e1, type: 3}
     - target: {fileID: 7555771521777369349, guid: 736231d04df351bac81fa7d690b1e8e8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
