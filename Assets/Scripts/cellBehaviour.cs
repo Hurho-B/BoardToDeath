@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class CellBehaviour : MonoBehaviour
 {
-    public bool northCanFaceEdge;
-    public bool eastCanFaceEdge;
-    public bool southCanFaceEdge;
-    public bool westCanFaceEdge;
+    public bool northCantFaceEdge;
+    public bool eastCantFaceEdge;
+    public bool southCantFaceEdge;
+    public bool westCantFaceEdge;
+    public GameObject module;
 
     // Never  Eat   Soggy  Waffles
     // North, East, South, West
@@ -19,21 +20,21 @@ public class CellBehaviour : MonoBehaviour
 
     public void UpdateRoom(bool[] isFacingEdge)
     {
-        int numOfRotations = 0;
+        float numOfRotations = 0f;
         // If an edge is not allowed to face the edge, then
         // we need to check to make sure it isn't facing an
         // edge.
-        if (northCanFaceEdge == false && isFacingEdge[0])
-        { numOfRotations += 1; }
-        if (eastCanFaceEdge == false && isFacingEdge[1])
-        { numOfRotations += 1; }
-        if (southCanFaceEdge == false && isFacingEdge[2])
-        { numOfRotations += 1; }
-        if (westCanFaceEdge == false && isFacingEdge[3])
-        { numOfRotations += 1; }
+        if (northCantFaceEdge == true && isFacingEdge[0])
+        { numOfRotations += 1f; }
+        if (eastCantFaceEdge == true && isFacingEdge[1])
+        { numOfRotations += 1f; }
+        if (southCantFaceEdge == true && isFacingEdge[2])
+        { numOfRotations += 1f; }
+        if (westCantFaceEdge == true && isFacingEdge[3])
+        { numOfRotations += 1f; }
         // We only need to rotate the gameobject if we got a
         // hit in the previous checks
         if (numOfRotations > 0)
-        { transform.RotateAround(transform.position, Vector3.up, 90 * numOfRotations); }
+        { Transform.Rotate(Vector3.up, 90 * numOfRotations); }
     }
 }

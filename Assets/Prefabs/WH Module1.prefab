@@ -1176,10 +1176,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f021729b65c4f492fa0314ee7cd95fa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CellBehaviour
-  northCanFaceEdge: 0
-  eastCanFaceEdge: 0
-  southCanFaceEdge: 0
-  westCanFaceEdge: 0
+  northCantFaceEdge: 1
+  eastCantFaceEdge: 1
+  southCantFaceEdge: 0
+  westCantFaceEdge: 0
+  module: {fileID: 6768476870022083964}
 --- !u!1 &8194286582016805284
 GameObject:
   m_ObjectHideFlags: 0
