@@ -8,7 +8,6 @@ public class CellBehaviour : MonoBehaviour
     public bool eastCantFaceEdge;
     public bool southCantFaceEdge;
     public bool westCantFaceEdge;
-    public GameObject module;
 
     // Never  Eat   Soggy  Waffles
     // North, East, South, West
@@ -20,21 +19,21 @@ public class CellBehaviour : MonoBehaviour
 
     public void UpdateRoom(bool[] isFacingEdge)
     {
-        float numOfRotations = 0f;
         // If an edge is not allowed to face the edge, then
         // we need to check to make sure it isn't facing an
         // edge.
+        float numOfRotations = 0;
         if (northCantFaceEdge == true && isFacingEdge[0])
-        { numOfRotations += 1f; }
+        { numOfRotations += 1; }
         if (eastCantFaceEdge == true && isFacingEdge[1])
-        { numOfRotations += 1f; }
+        { numOfRotations += 1; }
         if (southCantFaceEdge == true && isFacingEdge[2])
-        { numOfRotations += 1f; }
+        { numOfRotations += 1; }
         if (westCantFaceEdge == true && isFacingEdge[3])
-        { numOfRotations += 1f; }
+        { numOfRotations += 1; }
         // We only need to rotate the gameobject if we got a
         // hit in the previous checks
         if (numOfRotations > 0)
-        { Transform.Rotate(Vector3.up, 90 * numOfRotations); }
+        { transform.Rotate(Vector3.up, 90 * numOfRotations); }
     }
 }

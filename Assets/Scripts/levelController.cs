@@ -122,19 +122,6 @@ public class levelController : MonoBehaviour
         // { boonOptions.SetActive(!isBoonMenuActive); }
     }
 
-    void BoonMenu(bool active)
-    {
-        if (!active)
-            return;
-
-        // Ignore function, to be deleted
-
-        if (Input.GetKeyDown(KeyCode.Keypad1))
-        { }
-        if (Input.GetKeyDown(KeyCode.Keypad2))
-        { }
-    }
-
     void CalculateScore(int addedScore)
     {
         scores.Add(addedScore);
@@ -189,7 +176,6 @@ public class levelController : MonoBehaviour
             board[i].module = modVal;
             board[i].status = IsBorderingEdges(i);
             mapping.Add(modVal);
-            print(modVal);
         }
         GenerateLevel();
     }
@@ -213,23 +199,23 @@ public class levelController : MonoBehaviour
     //     return neighbors;
     // }
 
-    bool[] IsBorderingEdges(int cell)
-    {
-        bool[] isTouchingEdge = {false, false, false, false};
-        // Checks North neighbor
-        if (cell - size.x < 0) 
-        { isTouchingEdge[0] = true; }
-        // Checks East neighbor
-        if ((cell + 1) % size.y == 0)
-        { isTouchingEdge[1] = true; }
-        // Checks South neighbor
-        if (cell + size.x > board.Count)
-        { isTouchingEdge[2] = true; }
-        // Checks West neighbor
-        if (cell % size.y == 0)
-        { isTouchingEdge[3] = true; }
-        return isTouchingEdge;
-    }
+    // bool[] IsBorderingEdges(int cell)
+    // {
+    //     bool[] isTouchingEdge = {false, false, false, false};
+    //     // Checks North neighbor
+    //     if (cell - size.x < 0) 
+    //     { isTouchingEdge[0] = true; }
+    //     // Checks East neighbor
+    //     if ((cell + 1) % size.y == 0)
+    //     { isTouchingEdge[1] = true; }
+    //     // Checks South neighbor
+    //     if (cell + size.x > board.Count)
+    //     { isTouchingEdge[2] = true; }
+    //     // Checks West neighbor
+    //     if (cell % size.y == 0)
+    //     { isTouchingEdge[3] = true; }
+    //     return isTouchingEdge;
+    // }
 
     bool[] IsBorderingEdges(int cell)
     {
