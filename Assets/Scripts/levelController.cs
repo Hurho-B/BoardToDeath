@@ -17,14 +17,12 @@ public class levelController : MonoBehaviour
     public float timer = 60.0f;
 
     [Header("Generator Settings")]
-    [Tooltip("The size of the grid.")]
+    [Tooltip("Manually assign a size for the level.\nDefault will generate a square shape.")]
     public Vector2 size;
     [Tooltip("The distance between the center of each module.")]
     public int offset;
-    [Tooltip("The prefabs used for the generator.")]
-    public List<GameObject> module;
-    [Tooltip("Temp var, which cell to start generator at.")]
-    public int startPos = 0;
+    [Tooltip("The modules used for the generator.")]
+    public List<GameObject> modules;
 
     [Header("UI Elements")]
     [Tooltip("Text element to display time left on the timer.")]
@@ -46,7 +44,7 @@ public class levelController : MonoBehaviour
 
     public class Cell
     {
-        public bool visited = false;
+        public int module;
         public bool[] status = new bool[4];
     }
     List<Cell> board;
@@ -57,7 +55,10 @@ public class levelController : MonoBehaviour
         LevelGenerator();
         boonOptions.SetActive(false);
         currentSceneName = SceneManager.GetActiveScene().name;
-        print(module.Count);
+
+        // If no size is properly defined, generator
+        // will attempt to default to a square
+
     }
 
     void FixedUpdate()
@@ -146,125 +147,71 @@ public class levelController : MonoBehaviour
     {
         // After LevelGenerator(), new list is brought in
         // and used to make the actual environment/gameObjects
-        // for (int i = 0; i < size.x; i++)
-        // {
-        //     for (int j = 0; j < size.y; j++)
-        //     {
-        //         Cell currentCell = board[Mathf.FloorToInt(i + j * size.x)];
-        //         if (currentCell.visited)
-        //         {
-        //             RoomBehaviour newRoom = Instantiate(room, new Vector3(i * offset, 0, -j * offset), Quaternion.identity, transform).GetComponent<RoomBehaviour>();
-        //             newRoom.UpdateRoom(currentCell.status);
+        for (int i = 0; i < size.x; i++)
+        {
+            for (int j = 0; j < size.y; j++)
+            {
+                Cell currCell = board[Mathf.FloorToInt(i + j * size.x)];
+                CellBehaviour newCell = Instantiate(modules[currCell.module], new Vector3(i * offset, 0, -j * offset), Quaternion.identity, transform).GetComponent<CellBehaviour>();
+                newCell.UpdateRoom(currCell.status);
 
-        //             newRoom.name += " " + i + "-" + j;
-        //         }
-        //     }
+                newCell.name += " " + i + "-" + j;
+            }
 
-        // }
+        }
     }
 
     void LevelGenerator()
     {
-        // Generating the workable area
+        // Size values must be assigned a value and be able to encompass
+        // all given modules.
         board = new List<Cell>();
+        if (modules.Count > (size.x * size.y))
+        {
+            Debug.LogWarning("Too many modules for given size, auto-assigning size values.");
+            int val = 1;
+            while (modules.Count > (size.x * size.y))
+            {
+                size.x = val; size.y = val;
+                val += 1;
+            }
+        }
         for (int i = 0; i < (size.x * size.y); i++)
         { board.Add(new Cell()); }
 
-        for (int i = 0; i < size.x; i++)
+        // Mapping each module to a cell in a randomized manner
+        List<int> mapping = new List<int>();
+        int modVal = Random.Range(0, modules.Count);
+        for (int i = 0; i < modules.Count; i++)
         {
-
-            int currentCell = startPos;
-            Stack<int> path = new Stack<int>();
-            int k = 0;
-
-            while (k < 1000)
-            {
-                k++;
-
-                // Marking current cell, checking adjacent cells if
-                // they've already been visited
-                // This type of check means no 3 or 4 way junctions
-                board[currentCell].visited = true;
-                List<int> neighbors = CheckNeighbors(currentCell);
-
-                if (currentCell == board.Count - 1)
-                {
-                    break;
-                }
-
-
-                if (neighbors.Count == 0)
-                {
-                    if (path.Count == 0)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        currentCell = path.Pop();
-                    }
-                }
-                else
-                {
-                    path.Push(currentCell);
-                    int newCell = neighbors[Random.Range(0, neighbors.Count)];
-
-                    // This amalgamation marks which doors and walls
-                    // end up being toggled
-                    if (newCell > currentCell)
-                    {
-                        if (newCell - 1 == currentCell)
-                        {
-                            board[currentCell].status[1] = true;
-                            currentCell = newCell;
-                            board[currentCell].status[3] = true;
-                        }
-                        else
-                        {
-                            board[currentCell].status[2] = true;
-                            currentCell = newCell;
-                            board[currentCell].status[0] = true;
-                        }
-                    }
-                    else
-                    {
-                        if (newCell + 1 == currentCell)
-                        {
-                            board[currentCell].status[3] = true;
-                            currentCell = newCell;
-                            board[currentCell].status[1] = true;
-                        }
-                        else
-                        {
-                            board[currentCell].status[0] = true;
-                            currentCell = newCell;
-                            board[currentCell].status[2] = true;
-                        }
-                    }
-                }
-            }
+            while (mapping.Contains(modVal))
+            { modVal = Random.Range(0, modules.Count); }
+            board[i].module = modVal;
+            board[i].status = IsBorderingEdges(i);
+            mapping.Add(modVal);
+            print(modVal);
         }
         GenerateLevel();
     }
 
-    List<int> CheckNeighbors(int cell)
-    {
-        List<int> neighbors = new List<int>();
-        // Checks North neighbor
-        if (cell - size.x >= 0 && !board[Mathf.FloorToInt(cell - size.x)].visited)
-        { neighbors.Add(Mathf.FloorToInt(cell - size.x)); }
-        // Checks South neighbor
-        if (cell + size.x < board.Count && !board[Mathf.FloorToInt(cell + size.x)].visited)
-        { neighbors.Add(Mathf.FloorToInt(cell + size.x)); }
-        // Checks East neighbor
-        if ((cell + 1) % size.y != 0 && !board[Mathf.FloorToInt(cell + 1)].visited)
-        { neighbors.Add(Mathf.FloorToInt(cell + 1)); }
-        // Checks West neighbor
-        if (cell % size.y != 0 && !board[Mathf.FloorToInt(cell - 1)].visited)
-        { neighbors.Add(Mathf.FloorToInt(cell - 1)); }
-        // Returns a list of valid neighbors (board indexes) to steer into
-        return neighbors;
-    }
+    // List<int> CheckNeighbors(int cell)
+    // {
+    //     List<int> neighbors = new List<int>();
+    //     // Checks North neighbor
+    //     if (cell - size.x >= 0 && !board[Mathf.FloorToInt(cell - size.x)].visited)
+    //     { neighbors.Add(Mathf.FloorToInt(cell - size.x)); }
+    //     // Checks South neighbor
+    //     if (cell + size.x < board.Count && !board[Mathf.FloorToInt(cell + size.x)].visited)
+    //     { neighbors.Add(Mathf.FloorToInt(cell + size.x)); }
+    //     // Checks East neighbor
+    //     if ((cell + 1) % size.y != 0 && !board[Mathf.FloorToInt(cell + 1)].visited)
+    //     { neighbors.Add(Mathf.FloorToInt(cell + 1)); }
+    //     // Checks West neighbor
+    //     if (cell % size.y != 0 && !board[Mathf.FloorToInt(cell - 1)].visited)
+    //     { neighbors.Add(Mathf.FloorToInt(cell - 1)); }
+    //     // Returns a list of valid neighbors (board indexes) to steer into
+    //     return neighbors;
+    // }
 
     bool[] IsBorderingEdges(int cell)
     {

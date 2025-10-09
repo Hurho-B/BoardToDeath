@@ -992,15 +992,15 @@ PrefabInstance:
       objectReference: {fileID: 5459409631863508603, guid: 8b2bef5208577cef5bed1049686e21e1, type: 3}
     - target: {fileID: -7565130894151383419, guid: 736231d04df351bac81fa7d690b1e8e8, type: 3}
       propertyPath: offset
-      value: 10
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: -7565130894151383419, guid: 736231d04df351bac81fa7d690b1e8e8, type: 3}
       propertyPath: size.x
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -7565130894151383419, guid: 736231d04df351bac81fa7d690b1e8e8, type: 3}
       propertyPath: size.y
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -7565130894151383419, guid: 736231d04df351bac81fa7d690b1e8e8, type: 3}
       propertyPath: timeUI
@@ -1023,9 +1023,29 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -7565130894151383419, guid: 736231d04df351bac81fa7d690b1e8e8, type: 3}
+      propertyPath: modules.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: -7565130894151383419, guid: 736231d04df351bac81fa7d690b1e8e8, type: 3}
       propertyPath: 'module.Array.data[0]'
       value: 
       objectReference: {fileID: 5459409631863508603, guid: 8b2bef5208577cef5bed1049686e21e1, type: 3}
+    - target: {fileID: -7565130894151383419, guid: 736231d04df351bac81fa7d690b1e8e8, type: 3}
+      propertyPath: 'modules.Array.data[0]'
+      value: 
+      objectReference: {fileID: 6768476870022083964, guid: fe446643554382d448ad505fa8251317, type: 3}
+    - target: {fileID: -7565130894151383419, guid: 736231d04df351bac81fa7d690b1e8e8, type: 3}
+      propertyPath: 'modules.Array.data[1]'
+      value: 
+      objectReference: {fileID: 6768476870022083964, guid: fe446643554382d448ad505fa8251317, type: 3}
+    - target: {fileID: -7565130894151383419, guid: 736231d04df351bac81fa7d690b1e8e8, type: 3}
+      propertyPath: 'modules.Array.data[2]'
+      value: 
+      objectReference: {fileID: 6768476870022083964, guid: fe446643554382d448ad505fa8251317, type: 3}
+    - target: {fileID: -7565130894151383419, guid: 736231d04df351bac81fa7d690b1e8e8, type: 3}
+      propertyPath: 'modules.Array.data[3]'
+      value: 
+      objectReference: {fileID: 6768476870022083964, guid: fe446643554382d448ad505fa8251317, type: 3}
     - target: {fileID: 7555771521777369349, guid: 736231d04df351bac81fa7d690b1e8e8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

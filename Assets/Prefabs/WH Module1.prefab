@@ -1138,6 +1138,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4410320526369163967}
+  - component: {fileID: -5896142383278246920}
   m_Layer: 0
   m_Name: WH Module1
   m_TagString: Untagged
@@ -1154,7 +1155,7 @@ Transform:
   m_GameObject: {fileID: 6768476870022083964}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.55, y: 13.294, z: 28.691633}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1163,6 +1164,22 @@ Transform:
   - {fileID: 4242249722504429923}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-5896142383278246920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6768476870022083964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f021729b65c4f492fa0314ee7cd95fa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CellBehaviour
+  northCanFaceEdge: 0
+  eastCanFaceEdge: 0
+  southCanFaceEdge: 0
+  westCanFaceEdge: 0
 --- !u!1 &8194286582016805284
 GameObject:
   m_ObjectHideFlags: 0
