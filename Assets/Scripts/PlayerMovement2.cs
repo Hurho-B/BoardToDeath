@@ -3,101 +3,42 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement2 : MonoBehaviour
 {
-    public InputActionAsset InputActions;
+    [Header("Movement Variables")]
+    public float moveSpeed, turnRadius;
 
-    public InputAction moveAction;
-    public InputAction jumpAction;
+    public Vector3 forwardDirection = Vector3.forward;
 
-    public Vector2 moveAmount;
+    public Rigidbody playerRB;
 
-    public Rigidbody rb;
-
-    [Header("Movement Attributes")]
-    public float movementSpeed = 20;
-    public float rotateSpeed = 1000;
-    public float jumpSpeed = 5;
-
-    public float distanceFromGround;
-    public bool isGrounded;
+    bool isMoving;
+    bool isGrounded;
+    bool isTricking;
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
-        InputActions.FindActionMap("Player").Enable();
-    }
-
-    private void OnDisable()
-    {
-        InputActions.FindActionMap("Player").Disable();
+        moveSpeed = 20f;
+        turnRadius = 10f;
+        playerRB = GetComponent<Rigidbody>();
     }
 
     private void Start()
     {
-
-        moveAction = InputSystem.actions.FindAction("Move");
-        jumpAction = InputSystem.actions.FindAction("Jump");
-
-
-        rb.freezeRotation = true;
     }
 
     private void Update()
     {
-        moveAmount = moveAction.ReadValue<Vector2>();
-
-        if (distanceFromGround <= 1.00f)
-        {
-            isGrounded = true;
-        }
-
-        if (jumpAction.WasPressedThisFrame() && isGrounded)
-        {
-                Jump();
-                isGrounded = false;
-        }
     }
 
     private void FixedUpdate()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity))
-        {
-            distanceFromGround = hit.distance;
-        }
-
-        Moving();
+        Vector3 facingDirection = transform.forward.normalized;
+        playerRB.linearVelocity = forwardDirection * moveSpeed;
     }
 
-    public void Jump()
+
+    public void AutoForward()
     {
-            rb.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
-    }
 
-    public void Moving()
-    {
-        float horizontal = moveAmount.x;
-        float vertical = moveAmount.y;
 
-        // Get camera directions, but ignore vertical tilt
-        Vector3 camForward = Camera.main.transform.forward;
-        Vector3 camRight = Camera.main.transform.right;
-
-        camForward.y = 0f;
-        camRight.y = 0f;
-
-        camForward.Normalize();
-        camRight.Normalize();
-
-        // Movement relative to camera
-        Vector3 moveDirection = (camForward * vertical + camRight * horizontal).normalized;
-
-        // Apply movement
-        rb.MovePosition(rb.position + moveDirection * movementSpeed * Time.deltaTime);
-
-        if (moveDirection != Vector3.zero)
-        {
-            Quaternion toRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotateSpeed * Time.deltaTime);
-        }
-    }
+    }    
 }
