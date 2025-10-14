@@ -2671,6 +2671,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3854306615076140073}
+  - component: {fileID: -8835798988812957887}
   m_Layer: 0
   m_Name: WH Module 2
   m_TagString: Untagged
@@ -2696,6 +2697,22 @@ Transform:
   - {fileID: 5434166861392029121}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-8835798988812957887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1462129765228738663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f021729b65c4f492fa0314ee7cd95fa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CellBehaviour
+  northCantFaceEdge: 0
+  eastCantFaceEdge: 0
+  southCantFaceEdge: 1
+  westCantFaceEdge: 1
 --- !u!1 &1485468053389805883
 GameObject:
   m_ObjectHideFlags: 0

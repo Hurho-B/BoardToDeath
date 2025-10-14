@@ -203,7 +203,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-        private void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Rail"))
         {
