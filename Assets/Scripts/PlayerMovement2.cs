@@ -16,6 +16,8 @@ public class PlayerMovement2 : MonoBehaviour
 
     private void Awake()
     {
+
+
         moveSpeed = 20f;
         turnRadius = 10f;
         playerRB = GetComponent<Rigidbody>();
