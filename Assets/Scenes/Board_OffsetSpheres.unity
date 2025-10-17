@@ -207,7 +207,7 @@ Transform:
   m_GameObject: {fileID: 894333365}
   serializedVersion: 2
   m_LocalRotation: {x: 0.15487325, y: 0.000000008651601, z: -0.000000001356266, w: 0.98793435}
-  m_LocalPosition: {x: 0, y: 4.25, z: -7}
+  m_LocalPosition: {x: 0, y: 4.25, z: -30.78}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -511,7 +511,7 @@ Transform:
   m_GameObject: {fileID: 1082033479}
   serializedVersion: 2
   m_LocalRotation: {x: 0.15487324, y: 0.000000008651601, z: -0.0000000013562658, w: 0.9879344}
-  m_LocalPosition: {x: 0, y: 4.25, z: -7}
+  m_LocalPosition: {x: 0, y: 4.25, z: -30.78}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -881,6 +881,7 @@ GameObject:
   - component: {fileID: 1944782474}
   - component: {fileID: 1944782473}
   - component: {fileID: 1944782472}
+  - component: {fileID: 1944782478}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -900,32 +901,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca7410562e463184e99442049ef9a3d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MyPlayerLogic
-  InputActions: {fileID: -944628639613478452, guid: 4cd5f80bfb402f34987d7083bbcf0a0d, type: 3}
-  moveAction:
-    m_Name: Move
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: d118e901-2010-4d37-84c5-448a5fe44fee
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  jumpAction:
-    m_Name: Jump
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 14259f73-e89c-4554-a23e-41c26ab820b2
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  moveAmount: {x: 0, y: 0}
-  rb: {fileID: 0}
-  movementSpeed: 20
-  rotateSpeed: 1000
-  jumpSpeed: 5
-  distanceFromGround: 0
-  isGrounded: 0
+  moveSpeed: 10
+  turnRadius: 10
+  forwardDirection: {x: 0, y: 0, z: 1}
+  playerRB: {fileID: 0}
 --- !u!54 &1944782473
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -951,7 +930,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!136 &1944782474
 CapsuleCollider:
@@ -1041,13 +1020,43 @@ Transform:
   m_GameObject: {fileID: 1944782471}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: -23.78}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1534005589}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1944782478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944782471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
+  m_Actions: {fileID: -944628639613478452, guid: 4cd5f80bfb402f34987d7083bbcf0a0d, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: Keyboard and Mouse
+  m_DefaultActionMap: Skating
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
