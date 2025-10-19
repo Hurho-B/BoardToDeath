@@ -1,9 +1,10 @@
 using UnityEngine;
-using UnityEngine.InputSystem; 
+using UnityEngine.InputSystem;
+
+[RequireComponent(typeof(Rigidbody))]
 
 public class PlayerMovement2 : MonoBehaviour
 {
-    [Header("Movement Variables")]
     public float moveSpeed, turnRadius;
 
     public Vector3 forwardDirection = Vector3.forward;
@@ -16,11 +17,12 @@ public class PlayerMovement2 : MonoBehaviour
 
     private void Awake()
     {
-
-
         moveSpeed = 20f;
         turnRadius = 10f;
+
         playerRB = GetComponent<Rigidbody>();
+        playerRB.freezeRotation = true;
+        playerRB.maxLinearVelocity = 100f;
     }
 
     private void Start()
@@ -29,18 +31,25 @@ public class PlayerMovement2 : MonoBehaviour
 
     private void Update()
     {
+
     }
 
     private void FixedUpdate()
     {
-        Vector3 facingDirection = transform.forward.normalized;
-        playerRB.linearVelocity = forwardDirection * moveSpeed;
+        AutoForward();
+        RotateCheck();
     }
 
 
     public void AutoForward()
     {
+        // provides an acceleration: 
+        Vector3 facingDirection = transform.forward.normalized;
+        playerRB.linearVelocity += forwardDirection * moveSpeed * Time.deltaTime;
+    }
 
+    public void RotateCheck()
+    {
 
-    }    
+    }
 }
