@@ -14,7 +14,7 @@ public class levelController : MonoBehaviour
     [Tooltip("Debug: Amount of time before a combo finishes.")]
     public int comboTime;
     [Tooltip("How much time will the level have, in seconds.")]
-    public float timer = 60.0f;
+    public float levelTime;
 
     [Header("Generator Settings")]
     [Tooltip("Manually assign a size for the level.\nDefault will generate a square shape.")]
@@ -41,6 +41,10 @@ public class levelController : MonoBehaviour
     int sumOfTricks = 0;
     // Additional combo logic
 
+    // Failsafe logic
+    bool isHUDPresent = true;
+    bool isPlayerPresent = true;
+
     string currentSceneName;
 
     public class Cell
@@ -50,11 +54,41 @@ public class levelController : MonoBehaviour
     }
     List<Cell> board;
 
+
+    // Awake is handling failsafes, make sure that in the absense of an interacting Game Object
+    // that other elements can still be tested. Please leave this here :)
+    void Awake()
+    {
+        if (GameObject.Find("HUD") == null)
+        {
+            isHUDPresent = false;
+            Debug.LogWarning("HUD not present in scene, disabling HUD interactivity.");
+        }
+        if (GameObject.Find("PlayerCharacter") == null)
+        {
+            isPlayerPresent = false;
+            Debug.LogWarning("PlayerCharacter not present in scene, disabling PlayerCharacter interactivity.");
+        }
+        if (modules.Count < (size.x * size.y))
+        {
+            Debug.Log("Not enough modules to handle given size, auto-generating new size.");
+            size.x = 1;
+            size.y = 1;
+            while (modules.Count > (size.x * size.y))
+            {
+                size.x += 1;
+                while (modules.Count > (size.x * size.y))
+                    size.y += 1;
+            }
+        }
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         LevelGenerator();
         currentSceneName = SceneManager.GetActiveScene().name;
+        
 
         // If no size is properly defined, generator
         // will attempt to default to a square
@@ -63,17 +97,15 @@ public class levelController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (timer > 0)
-        { timer -= Time.deltaTime; }
-        else if (timer < 0)
+        if (levelTime > 0)
+        { levelTime -= Time.deltaTime; }
+        else if (levelTime < 0)
         {
-            timer = 0;
+            levelTime = 0;
             timeUI.color = Color.red;
-            SceneManager.LoadScene(currentSceneName);
+            if (playerScore < targetScore)
+                SceneManager.LoadScene(currentSceneName);
         }
-        int minutes = Mathf.FloorToInt(timer / 60);
-        int seconds = Mathf.FloorToInt(timer % 60);
-        timeUI.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
     void Update()
@@ -87,25 +119,36 @@ public class levelController : MonoBehaviour
             // CalculateScore("Rail Grind", 10);
         }
 
-
-
         // This math will not run until no more scores
         // are being added to the combo
         if (comboTimeLeft > 0.0 && calculatingScore)
-        { comboTimeLeft -= Time.deltaTime; }
+        {
+            comboTimeLeft -= Time.deltaTime;
+        }
         else if (calculatingScore)
         {
             calculatingScore = false;
-
-            // Something goes here
             playerScore += numOfTricks * sumOfTricks;
-
             numOfTricks = 0;
             sumOfTricks = 0;
             comboUI.text = "";
             tricksDoneUI.text = "";
         }
+
+        int minutes = Mathf.FloorToInt(levelTime / 60);
+        int seconds = Mathf.FloorToInt(levelTime % 60);
+
+        // Update UI elements
+        if (minutes > 0)
+            timeUI.text = string.Format("{0}:{1:00}", minutes, seconds);
+        else
+            timeUI.text = string.Format("{0}", seconds);
+        if (numOfTricks > 0)
+            comboUI.text = string.Format("{0} x {1}", numOfTricks, sumOfTricks);
+        else
+            comboUI.text = "";
         scoreUI.text = "Score:\n" + playerScore.ToString();
+
 
         // Deletes the existing list + gameObjects
         // Generates a new dungeon, comment out for final build.
@@ -119,27 +162,30 @@ public class levelController : MonoBehaviour
             }
             LevelGenerator();
         }
-
-        // Enables Boon Menu
-        // if (Input.GetKeyDown(KeyCode.M))
-        // { boonOptions.SetActive(!isBoonMenuActive); }
     }
 
+    // Updates appropriate values relating to tricks 
+    // being done and score being earned.
     void CalculateScore(string trickType, int addedScore)
     {
+        // Look at moving UI if/else later
         if (tricksDoneUI.text == "")
             tricksDoneUI.text = trickType + " ";
         else
             tricksDoneUI.text += "+ " + trickType + " ";
         numOfTricks += 1;
-        sumOfTricks += addedScore;
-        // Keep comboUI line here? Might be cleaner elsewhere, elsewhere might not
-        // be possible.
-        comboUI.text = string.Format("{0} x {1}", numOfTricks, sumOfTricks);
-        
-        // These two lines keep the combo going in Update()
         comboTimeLeft = comboTime;
         calculatingScore = true;
+        if (trickType != "Manual" && trickType != "Rail Grind")
+        {
+            sumOfTricks += addedScore;
+            return;
+        }
+        float comboTimePast = 0f;
+        while (isTricking)
+            comboTimePast += Time.deltaTime;
+            comboTimeLeft = comboTime;
+        sumOfTricks += addedScore * Mathf.FloorToInt(comboTimePast);
     }
 
     void GenerateLevel()
@@ -165,16 +211,6 @@ public class levelController : MonoBehaviour
         // Size values must be assigned a value and be able to encompass
         // all given modules.
         board = new List<Cell>();
-        if (modules.Count > (size.x * size.y))
-        {
-            Debug.LogWarning("Too many modules for given size, auto-assigning size values.");
-            int val = 1;
-            while (modules.Count > (size.x * size.y))
-            {
-                size.x = val; size.y = val;
-                val += 1;
-            }
-        }
         for (int i = 0; i < (size.x * size.y); i++)
         { board.Add(new Cell()); }
 
