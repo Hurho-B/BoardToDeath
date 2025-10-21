@@ -29,17 +29,18 @@ public class levelController : MonoBehaviour
     public TMP_Text timeUI;
     [Tooltip("Text element to display score.")]
     public TMP_Text scoreUI;
-    [Tooltip("Text element to display # of tricks done in a combo")]
+    [Tooltip("Text element to display # of tricks done and banked score.")]
     public TMP_Text comboUI;
     [Tooltip("Text element to display the score that will be earned after a combo")]
-    public TMP_Text sumScoreUI;
-    [Tooltip("Menu to look at Boons.")]
-    public GameObject boonOptions;
+    public TMP_Text tricksDoneUI;
 
-    float comboTimeLeft = 0;
+    // Additional combo logic
     bool calculatingScore = false;
-    List<int> scores = new List<int>();
-    int sumScore = 0;
+    float comboTimeLeft = 0;
+    int numOfTricks = 0;
+    int sumOfTricks = 0;
+    // Additional combo logic
+
     string currentSceneName;
 
     public class Cell
@@ -53,7 +54,6 @@ public class levelController : MonoBehaviour
     void Start()
     {
         LevelGenerator();
-        boonOptions.SetActive(false);
         currentSceneName = SceneManager.GetActiveScene().name;
 
         // If no size is properly defined, generator
@@ -78,13 +78,16 @@ public class levelController : MonoBehaviour
 
     void Update()
     {
-        bool isBoonMenuActive = boonOptions.activeSelf;
-        // BoonMenu(isBoonMenuActive);
-        int tempScore = 50;
-
         // KeyBind calling CalculateScore
         if (Input.GetKeyDown(KeyCode.R))
-        { CalculateScore(tempScore); }
+        {
+            CalculateScore("Ollie", 50);
+            // CalculateScore("Manual", 20);
+            // CalculateScore("Kickflip", 20);
+            // CalculateScore("Rail Grind", 10);
+        }
+
+
 
         // This math will not run until no more scores
         // are being added to the combo
@@ -93,19 +96,19 @@ public class levelController : MonoBehaviour
         else if (calculatingScore)
         {
             calculatingScore = false;
-            foreach (int score in scores)
-            { sumScore += score; }
 
-            sumScore *= scores.Count;
-            playerScore += sumScore;
+            // Something goes here
+            playerScore += numOfTricks * sumOfTricks;
 
-            sumScore = 0;
-            scores.Clear();
+            numOfTricks = 0;
+            sumOfTricks = 0;
+            comboUI.text = "";
+            tricksDoneUI.text = "";
         }
         scoreUI.text = "Score:\n" + playerScore.ToString();
 
         // Deletes the existing list + gameObjects
-        // Generates a new dungeon
+        // Generates a new dungeon, comment out for final build.
         if (Input.GetKeyDown(KeyCode.T))
         {
             board.Clear();
@@ -122,12 +125,21 @@ public class levelController : MonoBehaviour
         // { boonOptions.SetActive(!isBoonMenuActive); }
     }
 
-    void CalculateScore(int addedScore)
+    void CalculateScore(string trickType, int addedScore)
     {
-        scores.Add(addedScore);
+        if (tricksDoneUI.text == "")
+            tricksDoneUI.text = trickType + " ";
+        else
+            tricksDoneUI.text += "+ " + trickType + " ";
+        numOfTricks += 1;
+        sumOfTricks += addedScore;
+        // Keep comboUI line here? Might be cleaner elsewhere, elsewhere might not
+        // be possible.
+        comboUI.text = string.Format("{0} x {1}", numOfTricks, sumOfTricks);
+        
+        // These two lines keep the combo going in Update()
         comboTimeLeft = comboTime;
         calculatingScore = true;
-        print(scores.Count);
     }
 
     void GenerateLevel()
@@ -179,43 +191,6 @@ public class levelController : MonoBehaviour
         }
         GenerateLevel();
     }
-
-    // List<int> CheckNeighbors(int cell)
-    // {
-    //     List<int> neighbors = new List<int>();
-    //     // Checks North neighbor
-    //     if (cell - size.x >= 0 && !board[Mathf.FloorToInt(cell - size.x)].visited)
-    //     { neighbors.Add(Mathf.FloorToInt(cell - size.x)); }
-    //     // Checks South neighbor
-    //     if (cell + size.x < board.Count && !board[Mathf.FloorToInt(cell + size.x)].visited)
-    //     { neighbors.Add(Mathf.FloorToInt(cell + size.x)); }
-    //     // Checks East neighbor
-    //     if ((cell + 1) % size.y != 0 && !board[Mathf.FloorToInt(cell + 1)].visited)
-    //     { neighbors.Add(Mathf.FloorToInt(cell + 1)); }
-    //     // Checks West neighbor
-    //     if (cell % size.y != 0 && !board[Mathf.FloorToInt(cell - 1)].visited)
-    //     { neighbors.Add(Mathf.FloorToInt(cell - 1)); }
-    //     // Returns a list of valid neighbors (board indexes) to steer into
-    //     return neighbors;
-    // }
-
-    // bool[] IsBorderingEdges(int cell)
-    // {
-    //     bool[] isTouchingEdge = {false, false, false, false};
-    //     // Checks North neighbor
-    //     if (cell - size.x < 0) 
-    //     { isTouchingEdge[0] = true; }
-    //     // Checks East neighbor
-    //     if ((cell + 1) % size.y == 0)
-    //     { isTouchingEdge[1] = true; }
-    //     // Checks South neighbor
-    //     if (cell + size.x > board.Count)
-    //     { isTouchingEdge[2] = true; }
-    //     // Checks West neighbor
-    //     if (cell % size.y == 0)
-    //     { isTouchingEdge[3] = true; }
-    //     return isTouchingEdge;
-    // }
 
     bool[] IsBorderingEdges(int cell)
     {
