@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     private InputAction m_brakeAction;
     private InputAction m_ollieAction;
     private InputAction m_manualAction;
+    private InputAction m_kickflipAction;
 
     // Grabbing components and data
     private Vector2 m_moveAmt;
@@ -24,19 +25,21 @@ public class PlayerController : MonoBehaviour
 
     // Declaring conditional bools
     private bool readyToJump = true;
-    private bool isOnGround = true;
+    public bool isOnGround = true;
 
     // Declaring animation bools
-    private bool doingJump;
-    private bool doingGrab;
-    private bool doingManual;
-    private bool doingKickflip;
-    private bool doingRailGrind;
+    public bool doingJump;
+    public bool doingGrab;
+    public bool doingManual;
+    public bool doingKickflip;
+    public bool doingRailGrind;
 
     // Declaring editable stats
     public float baseCruiseSpeed = 5;
     public float baseRotateSpeed = 5;
     public float baseOllieHeight = 5;
+    public float airMultiplier;
+    public float groundDrag;
     public float jumpForce;
     public float jumpCooldown;
 
@@ -58,6 +61,7 @@ public class PlayerController : MonoBehaviour
         m_brakeAction = InputSystem.actions.FindAction("Brake");
         m_ollieAction = InputSystem.actions.FindAction("Ollie");
         m_manualAction = InputSystem.actions.FindAction("Manual");
+        m_kickflipAction = InputSystem.actions.FindAction("Manual");
 
         m_animator = GetComponent<Animator>();
         m_rigidbody = GetComponent<Rigidbody>();
@@ -82,6 +86,7 @@ public class PlayerController : MonoBehaviour
             m_rigidbody.linearDamping = groundDrag;
             doingJump = false;
             doingKickflip = false;
+            m_animator.SetBool("isJumping", doingJump);
         }
         else
         {
@@ -98,16 +103,23 @@ public class PlayerController : MonoBehaviour
         if (m_manualAction.WasPressedThisFrame() && isOnGround)
         {
             doingManual = true;
+            // sliderScript.ToggleManual(doingManual);
+            m_animator.SetBool("manny", doingManual);
         }
         else if (m_manualAction.WasPressedThisFrame() && !isOnGround)
         {
             doingManual = false;
+            // sliderScript.ToggleManual(doingManual);
+            m_animator.SetBool("manny", doingManual);
         }
-        
-        if (m_manualAction.WasPressedThisFrame() && !isOnGround)
+
+        if (m_kickflipAction.WasPressedThisFrame() && !isOnGround)
         {
             doingKickflip = true;
+            m_animator.SetBool("kick", doingKickflip);
         }
+
+        MovePlayer();
     }
 
     public void CheckIfOnGround()
@@ -119,6 +131,7 @@ public class PlayerController : MonoBehaviour
         // 
         // }
 
+        RaycastHit hit;
         //                  origin              direction     hitinfo  MaxDistance
         if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.17f))
         {
@@ -126,6 +139,8 @@ public class PlayerController : MonoBehaviour
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, surfaceNormal) * transform.rotation;
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10);
         }
+
+        m_animator.SetBool("grounded", isOnGround);
 
     }
 
@@ -147,14 +162,14 @@ public class PlayerController : MonoBehaviour
     void MovePlayer()
     {
         //movement direction
-        Vector3 moveDirection = transform.forward * m_moveAmt.x + transform.right * m_moveAmt[1];
+        Vector3 moveDirection = transform.forward * m_moveAmt.y + transform.right * m_moveAmt.x;
 
         // If the player is considered on the ground...
         if (isOnGround)
-            m_rigidbody.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+            m_rigidbody.AddForce(moveDirection.normalized * baseCruiseSpeed * 10f, ForceMode.Force);
         // If the player is considered airborne...
         else if (!isOnGround)
-            m_rigidbody.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            m_rigidbody.AddForce(moveDirection.normalized * baseCruiseSpeed * 10f * airMultiplier, ForceMode.Force);
     }
 
     void SpeedControl()
@@ -162,9 +177,9 @@ public class PlayerController : MonoBehaviour
         Vector3 flatVel = new Vector3(m_rigidbody.linearVelocity.x, 0f, m_rigidbody.linearVelocity.z);
 
         //Max speed
-        if (flatVel.magnitude > moveSpeed)
+        if (flatVel.magnitude > baseCruiseSpeed)
         {
-            Vector3 limitedVel = flatVel.normalized * moveSpeed;
+            Vector3 limitedVel = flatVel.normalized * baseCruiseSpeed;
             m_rigidbody.linearVelocity = new Vector3(limitedVel.x, m_rigidbody.linearVelocity.y, limitedVel.z);
         }
     }
@@ -177,6 +192,7 @@ public class PlayerController : MonoBehaviour
             doingRailGrind = true;
             m_rigidbody.useGravity = false;
             doingJump = false;
+            m_animator.SetBool("isJumping", doingJump);
             currentRail = other.transform;
             Debug.Log("Player entered a rail!");
         }
