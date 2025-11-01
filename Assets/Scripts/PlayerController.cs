@@ -10,9 +10,8 @@ public class PlayerController : MonoBehaviour
     // Mapping Unity actions into player script
     private InputAction m_moveAction;
     private InputAction m_lookAction;
-    private InputAction m_jumpAction;
-    private InputAction m_brakeAction;
     private InputAction m_ollieAction;
+    private InputAction m_brakeAction;
     private InputAction m_manualAction;
     private InputAction m_kickflipAction;
 
@@ -37,11 +36,32 @@ public class PlayerController : MonoBehaviour
     // Declaring editable stats
     public float baseCruiseSpeed = 5;
     public float baseRotateSpeed = 5;
-    public float baseOllieHeight = 5;
     public float airMultiplier;
     public float groundDrag;
     public float jumpForce;
     public float jumpCooldown;
+
+    [Header("Ollie Jump Values")]
+    [Tooltip("The base ollie height without charging.")]
+    public float baseOllieHeight = 5;
+    [Tooltip("The rate that the height multiplyer increases by per second.")]
+    public float ollieHeightChargeRate;
+    [Tooltip("The largest value that the height multiplyer can be.")]
+    public float maxOllieHeightMult;
+    [Tooltip("How long an ollie must be charging before a height increase begins.")]
+    public float delayBeforeOllieHeightCharge;
+
+    [Header("Ollie Speed Values")]
+    [Tooltip("The rate that the speed multiplyer increases by per second.")]
+    public float ollieSpeedChargeRate;
+    [Tooltip("The largest value that the speed multiplyer can be.")]
+    public float maxOllieSpeedMult;
+    [Tooltip("How long an ollie must be charging before a speed increase begins.")]
+    public float delayBeforeOllieSpeedCharge;
+
+    private float delayTime = 0f;
+    private float ollieHeightMult = 1f;
+    private float OllieSpeedMult = 1f;
 
     private void OnEnable()
     {
@@ -57,9 +77,8 @@ public class PlayerController : MonoBehaviour
     {
         m_moveAction = InputSystem.actions.FindAction("Move");
         m_lookAction = InputSystem.actions.FindAction("Look");
-        m_jumpAction = InputSystem.actions.FindAction("Jump");
+        m_ollieAction = InputSystem.actions.FindAction("Jump");
         m_brakeAction = InputSystem.actions.FindAction("Brake");
-        m_ollieAction = InputSystem.actions.FindAction("Ollie");
         m_manualAction = InputSystem.actions.FindAction("Manual");
         m_kickflipAction = InputSystem.actions.FindAction("Manual");
 
@@ -93,24 +112,52 @@ public class PlayerController : MonoBehaviour
             m_rigidbody.linearDamping = 0;
         }
 
-        if (m_jumpAction.WasPressedThisFrame() && readyToJump)
+        // if (m_jumpAction.WasPressedThisFrame() && readyToJump)
+        // {
+        //     readyToJump = false;
+        //     Jump();
+        //     Invoke(nameof(ResetJump), jumpCooldown);
+        // }
+
+        if (m_ollieAction.WasPressedThisFrame())
         {
-            readyToJump = false;
-            Jump();
-            Invoke(nameof(ResetJump), jumpCooldown);
+            if (doingManual)
+            {
+                doingManual = false;
+                // sliderScript.ToggleManual(doingManual);
+                m_animator.SetBool("manny", doingManual);
+            }
+        }
+        else if (m_ollieAction.IsPressed())
+        {
+            delayTime += Time.deltaTime;
+            if (delayTime > delayBeforeOllieSpeedCharge)
+                if (ollieSpeedMult < maxOllieSpeedMult)
+                    ollieSpeedMult += ollieSpeedChargeRate * Time.deltaTime;
+            if (delayTime > delayBeforeOllieHeightCharge)
+                if (ollieHeightMult < maxOllieHeightMult)
+                    ollieHeightMult += ollieHeightChargeRate * Time.deltaTime;
+        }
+        else if (m_ollieAction.WasReleasedThisFrame())
+        {
+            m_rigidbody.AddForce(transform.up * (baseOllieHeight * ollieHeightMult), ForceMode.Impulse);
         }
 
-        if (m_manualAction.WasPressedThisFrame() && isOnGround)
+        if (m_manualAction.WasPressedThisFrame())
         {
-            doingManual = true;
-            // sliderScript.ToggleManual(doingManual);
-            m_animator.SetBool("manny", doingManual);
-        }
-        else if (m_manualAction.WasPressedThisFrame() && !isOnGround)
-        {
-            doingManual = false;
-            // sliderScript.ToggleManual(doingManual);
-            m_animator.SetBool("manny", doingManual);
+            if (isOnGround && !doingManual)
+            {
+                doingManual = true;
+                // sliderScript.ToggleManual(doingManual);
+                m_animator.SetBool("manny", doingManual);
+            }
+            else if (isOnGround && doingManual)
+            {
+                doingManual = false;
+                // sliderScript.ToggleManual(doingManual);
+                m_animator.SetBool("manny", doingManual);
+            }
+
         }
 
         if (m_kickflipAction.WasPressedThisFrame() && !isOnGround)
@@ -182,6 +229,11 @@ public class PlayerController : MonoBehaviour
             Vector3 limitedVel = flatVel.normalized * baseCruiseSpeed;
             m_rigidbody.linearVelocity = new Vector3(limitedVel.x, m_rigidbody.linearVelocity.y, limitedVel.z);
         }
+    }
+
+    void Grab()
+    {
+        // Some lil air thing where you grab da board
     }
 
     private void OnTriggerEnter(Collider other)
