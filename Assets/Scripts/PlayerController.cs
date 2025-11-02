@@ -61,7 +61,15 @@ public class PlayerController : MonoBehaviour
 
     private float delayTime = 0f;
     private float ollieHeightMult = 1f;
-    private float OllieSpeedMult = 1f;
+    private float ollieSpeedMult = 1f;
+    private float newOllieHeight;
+
+    // [Header("Physics Values")]
+    private float gravity = 9.8f;
+
+    private float airDrag;
+    private float currentGravity = 0.0f;
+    private float currentSpeed = 0.0f;
 
     private void OnEnable()
     {
@@ -140,7 +148,11 @@ public class PlayerController : MonoBehaviour
         }
         else if (m_ollieAction.WasReleasedThisFrame())
         {
+            currentGravity = 0f;
             m_rigidbody.AddForce(transform.up * (baseOllieHeight * ollieHeightMult), ForceMode.Impulse);
+            delayTime = 0f;
+            ollieHeightMult = 1f;
+            ollieSpeedMult = 1f;
         }
 
         if (m_manualAction.WasPressedThisFrame())
@@ -166,7 +178,7 @@ public class PlayerController : MonoBehaviour
             m_animator.SetBool("kick", doingKickflip);
         }
 
-        MovePlayer();
+        MovePlayer(baseCruiseSpeed * ollieSpeedMult);
     }
 
     public void CheckIfOnGround()
@@ -191,32 +203,35 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    public void Jump()
+    void MovePlayer(float targetSpeed)
     {
-        //reset vertical velocity
-        m_rigidbody.linearVelocity = new Vector3(m_rigidbody.linearVelocity.x, 0f, m_rigidbody.linearVelocity.z);
+        Vector3 currentVelocity = m_rigidbody.linearVelocity;
 
-        m_rigidbody.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        // Apply gravity to the Player, first check is a psudo grounded check.
+        // Rework later when grounded check is good to go.
+        print("Y value changes | " + currentVelocity.y + "      Current Grav | " + currentGravity);
+        if (currentVelocity.y > -0.5)
+            currentGravity = 0.5f;
+        else if (currentGravity < gravity)
+            currentGravity += gravity * Time.deltaTime;
+        m_rigidbody.AddForce(Physics.gravity * currentGravity, ForceMode.Acceleration);
 
-        Debug.Log("Jumped");
-    }
 
-    public void ResetJump()
-    {
-        readyToJump = true;
-    }
-    
-    void MovePlayer()
-    {
-        //movement direction
-        Vector3 moveDirection = transform.forward * m_moveAmt.y + transform.right * m_moveAmt.x;
+        Vector3 moveDirection = transform.forward;
+
+        m_rigidbody.AddForce(moveDirection.normalized * baseCruiseSpeed * 10f, ForceMode.Force);
+        // Have the Player automatically move forward
+        // if (currentSpeed < targetSpeed)
+        // playerRB.AddForce(transform.forward, ForceMode.Acceleration);
+
+        // Vector3 moveDirection = transform.forward * m_moveAmt.y + transform.right * m_moveAmt.x;
 
         // If the player is considered on the ground...
-        if (isOnGround)
-            m_rigidbody.AddForce(moveDirection.normalized * baseCruiseSpeed * 10f, ForceMode.Force);
+        // if (isOnGround)
+        // m_rigidbody.AddForce(moveDirection.normalized * baseCruiseSpeed * 10f, ForceMode.Force);
         // If the player is considered airborne...
-        else if (!isOnGround)
-            m_rigidbody.AddForce(moveDirection.normalized * baseCruiseSpeed * 10f * airMultiplier, ForceMode.Force);
+        // else if (!isOnGround)
+        // m_rigidbody.AddForce(moveDirection.normalized * baseCruiseSpeed * 10f * airMultiplier, ForceMode.Force);
     }
 
     void SpeedControl()
