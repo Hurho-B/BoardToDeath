@@ -140,11 +140,10 @@ public class PlayerMovement : MonoBehaviour
         //movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-        //grounded
+        // If the player is considered on the ground...
         if (grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
-
-        //aerial
+        // If the player is considered airborne...
         else if (!grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
     }
@@ -203,7 +202,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-        private void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Rail"))
         {
