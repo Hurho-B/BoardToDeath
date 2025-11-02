@@ -9,6 +9,14 @@ public class CellBehaviour : MonoBehaviour
     public bool southCantFaceEdge;
     public bool westCantFaceEdge;
 
+    [SerializeField] GameObject[] spawnPoints;
+
+    void Start()
+    {
+        //Looks for any Game Objects in the scene with the required tag
+        spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+    }
+
     // Never  Eat   Soggy  Waffles
     // North, East, South, West
     // 0      1     2      3
