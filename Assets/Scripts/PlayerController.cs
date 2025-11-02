@@ -10,10 +10,10 @@ public class PlayerController : MonoBehaviour
     // Mapping Unity actions into player script
     private InputAction m_moveAction;
     private InputAction m_lookAction;
-    private InputAction m_jumpAction;
-    private InputAction m_brakeAction;
     private InputAction m_ollieAction;
+    private InputAction m_brakeAction;
     private InputAction m_manualAction;
+    private InputAction m_kickflipAction;
 
     // Grabbing components and data
     private Vector2 m_moveAmt;
@@ -24,21 +24,52 @@ public class PlayerController : MonoBehaviour
 
     // Declaring conditional bools
     private bool readyToJump = true;
-    private bool isOnGround = true;
+    public bool isOnGround = true;
 
     // Declaring animation bools
-    private bool doingJump;
-    private bool doingGrab;
-    private bool doingManual;
-    private bool doingKickflip;
-    private bool doingRailGrind;
+    public bool doingJump;
+    public bool doingGrab;
+    public bool doingManual;
+    public bool doingKickflip;
+    public bool doingRailGrind;
 
     // Declaring editable stats
     public float baseCruiseSpeed = 5;
     public float baseRotateSpeed = 5;
-    public float baseOllieHeight = 5;
+    public float airMultiplier;
+    public float groundDrag;
     public float jumpForce;
     public float jumpCooldown;
+
+    [Header("Ollie Jump Values")]
+    [Tooltip("The base ollie height without charging.")]
+    public float baseOllieHeight = 5;
+    [Tooltip("The rate that the height multiplyer increases by per second.")]
+    public float ollieHeightChargeRate;
+    [Tooltip("The largest value that the height multiplyer can be.")]
+    public float maxOllieHeightMult;
+    [Tooltip("How long an ollie must be charging before a height increase begins.")]
+    public float delayBeforeOllieHeightCharge;
+
+    [Header("Ollie Speed Values")]
+    [Tooltip("The rate that the speed multiplyer increases by per second.")]
+    public float ollieSpeedChargeRate;
+    [Tooltip("The largest value that the speed multiplyer can be.")]
+    public float maxOllieSpeedMult;
+    [Tooltip("How long an ollie must be charging before a speed increase begins.")]
+    public float delayBeforeOllieSpeedCharge;
+
+    private float delayTime = 0f;
+    private float ollieHeightMult = 1f;
+    private float ollieSpeedMult = 1f;
+    private float newOllieHeight;
+
+    // [Header("Physics Values")]
+    private float gravity = 9.8f;
+
+    private float airDrag;
+    private float currentGravity = 0.0f;
+    private float currentSpeed = 0.0f;
 
     private void OnEnable()
     {
@@ -54,10 +85,10 @@ public class PlayerController : MonoBehaviour
     {
         m_moveAction = InputSystem.actions.FindAction("Move");
         m_lookAction = InputSystem.actions.FindAction("Look");
-        m_jumpAction = InputSystem.actions.FindAction("Jump");
+        m_ollieAction = InputSystem.actions.FindAction("Jump");
         m_brakeAction = InputSystem.actions.FindAction("Brake");
-        m_ollieAction = InputSystem.actions.FindAction("Ollie");
         m_manualAction = InputSystem.actions.FindAction("Manual");
+        m_kickflipAction = InputSystem.actions.FindAction("Manual");
 
         m_animator = GetComponent<Animator>();
         m_rigidbody = GetComponent<Rigidbody>();
@@ -82,32 +113,72 @@ public class PlayerController : MonoBehaviour
             m_rigidbody.linearDamping = groundDrag;
             doingJump = false;
             doingKickflip = false;
+            m_animator.SetBool("isJumping", doingJump);
         }
         else
         {
             m_rigidbody.linearDamping = 0;
         }
 
-        if (m_jumpAction.WasPressedThisFrame() && readyToJump)
+        // if (m_jumpAction.WasPressedThisFrame() && readyToJump)
+        // {
+        //     readyToJump = false;
+        //     Jump();
+        //     Invoke(nameof(ResetJump), jumpCooldown);
+        // }
+
+        if (m_ollieAction.WasPressedThisFrame())
         {
-            readyToJump = false;
-            Jump();
-            Invoke(nameof(ResetJump), jumpCooldown);
+            if (doingManual)
+            {
+                doingManual = false;
+                // sliderScript.ToggleManual(doingManual);
+                m_animator.SetBool("manny", doingManual);
+            }
+        }
+        else if (m_ollieAction.IsPressed())
+        {
+            delayTime += Time.deltaTime;
+            if (delayTime > delayBeforeOllieSpeedCharge)
+                if (ollieSpeedMult < maxOllieSpeedMult)
+                    ollieSpeedMult += ollieSpeedChargeRate * Time.deltaTime;
+            if (delayTime > delayBeforeOllieHeightCharge)
+                if (ollieHeightMult < maxOllieHeightMult)
+                    ollieHeightMult += ollieHeightChargeRate * Time.deltaTime;
+        }
+        else if (m_ollieAction.WasReleasedThisFrame())
+        {
+            currentGravity = 0f;
+            m_rigidbody.AddForce(transform.up * (baseOllieHeight * ollieHeightMult), ForceMode.Impulse);
+            delayTime = 0f;
+            ollieHeightMult = 1f;
+            ollieSpeedMult = 1f;
         }
 
-        if (m_manualAction.WasPressedThisFrame() && isOnGround)
+        if (m_manualAction.WasPressedThisFrame())
         {
-            doingManual = true;
+            if (isOnGround && !doingManual)
+            {
+                doingManual = true;
+                // sliderScript.ToggleManual(doingManual);
+                m_animator.SetBool("manny", doingManual);
+            }
+            else if (isOnGround && doingManual)
+            {
+                doingManual = false;
+                // sliderScript.ToggleManual(doingManual);
+                m_animator.SetBool("manny", doingManual);
+            }
+
         }
-        else if (m_manualAction.WasPressedThisFrame() && !isOnGround)
-        {
-            doingManual = false;
-        }
-        
-        if (m_manualAction.WasPressedThisFrame() && !isOnGround)
+
+        if (m_kickflipAction.WasPressedThisFrame() && !isOnGround)
         {
             doingKickflip = true;
+            m_animator.SetBool("kick", doingKickflip);
         }
+
+        MovePlayer(baseCruiseSpeed * ollieSpeedMult);
     }
 
     public void CheckIfOnGround()
@@ -119,6 +190,7 @@ public class PlayerController : MonoBehaviour
         // 
         // }
 
+        RaycastHit hit;
         //                  origin              direction     hitinfo  MaxDistance
         if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.17f))
         {
@@ -127,34 +199,36 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10);
         }
 
+        m_animator.SetBool("grounded", isOnGround);
+
     }
 
-    public void Jump()
+    void MovePlayer(float targetSpeed)
     {
-        //reset vertical velocity
-        m_rigidbody.linearVelocity = new Vector3(m_rigidbody.linearVelocity.x, 0f, m_rigidbody.linearVelocity.z);
+        Vector3 currentVelocity = m_rigidbody.linearVelocity;
 
-        m_rigidbody.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        // Apply gravity to the Player, first check is a psudo grounded check.
+        // Rework later when grounded check is good to go.
+        // print("Y value changes | " + m_);
+        if (currentVelocity.y > -0.5)
+            currentGravity = 0.5f;
+        else if (currentGravity < gravity)
+            currentGravity += gravity * Time.deltaTime;
+        m_rigidbody.AddForce(Physics.gravity * currentGravity, ForceMode.Acceleration);
 
-        Debug.Log("Jumped");
-    }
 
-    public void ResetJump()
-    {
-        readyToJump = true;
-    }
-    
-    void MovePlayer()
-    {
-        //movement direction
-        Vector3 moveDirection = transform.forward * m_moveAmt.x + transform.right * m_moveAmt[1];
+        Transform player = transform;
 
-        // If the player is considered on the ground...
-        if (isOnGround)
-            m_rigidbody.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
-        // If the player is considered airborne...
-        else if (!isOnGround)
-            m_rigidbody.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+        if (currentVelocity.x > targetSpeed)
+            currentSpeed = targetSpeed;
+        else if (currentSpeed < targetSpeed)
+            currentSpeed += targetSpeed * Time.deltaTime;
+        m_rigidbody.AddForce(player.forward.normalized * targetSpeed * 10f, ForceMode.Acceleration);
+
+        if (m_moveAction.IsPressed() && m_moveAmt.x != 0)
+        {
+            transform.RotateAround(player.transform.position, Vector3.up, (baseRotateSpeed * m_moveAmt.x) * Time.deltaTime);
+        }
     }
 
     void SpeedControl()
@@ -162,11 +236,16 @@ public class PlayerController : MonoBehaviour
         Vector3 flatVel = new Vector3(m_rigidbody.linearVelocity.x, 0f, m_rigidbody.linearVelocity.z);
 
         //Max speed
-        if (flatVel.magnitude > moveSpeed)
+        if (flatVel.magnitude > baseCruiseSpeed)
         {
-            Vector3 limitedVel = flatVel.normalized * moveSpeed;
+            Vector3 limitedVel = flatVel.normalized * baseCruiseSpeed;
             m_rigidbody.linearVelocity = new Vector3(limitedVel.x, m_rigidbody.linearVelocity.y, limitedVel.z);
         }
+    }
+
+    void Grab()
+    {
+        // Some lil air thing where you grab da board
     }
 
     private void OnTriggerEnter(Collider other)
@@ -177,6 +256,7 @@ public class PlayerController : MonoBehaviour
             doingRailGrind = true;
             m_rigidbody.useGravity = false;
             doingJump = false;
+            m_animator.SetBool("isJumping", doingJump);
             currentRail = other.transform;
             Debug.Log("Player entered a rail!");
         }
