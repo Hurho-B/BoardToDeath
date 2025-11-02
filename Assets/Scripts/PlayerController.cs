@@ -209,7 +209,7 @@ public class PlayerController : MonoBehaviour
 
         // Apply gravity to the Player, first check is a psudo grounded check.
         // Rework later when grounded check is good to go.
-        print("Y value changes | " + currentVelocity.y + "      Current Grav | " + currentGravity);
+        // print("Y value changes | " + m_);
         if (currentVelocity.y > -0.5)
             currentGravity = 0.5f;
         else if (currentGravity < gravity)
@@ -217,21 +217,18 @@ public class PlayerController : MonoBehaviour
         m_rigidbody.AddForce(Physics.gravity * currentGravity, ForceMode.Acceleration);
 
 
-        Vector3 moveDirection = transform.forward;
+        Transform player = transform;
 
-        m_rigidbody.AddForce(moveDirection.normalized * baseCruiseSpeed * 10f, ForceMode.Force);
-        // Have the Player automatically move forward
-        // if (currentSpeed < targetSpeed)
-        // playerRB.AddForce(transform.forward, ForceMode.Acceleration);
+        if (currentVelocity.x > targetSpeed)
+            currentSpeed = targetSpeed;
+        else if (currentSpeed < targetSpeed)
+            currentSpeed += targetSpeed * Time.deltaTime;
+        m_rigidbody.AddForce(player.forward.normalized * targetSpeed * 10f, ForceMode.Acceleration);
 
-        // Vector3 moveDirection = transform.forward * m_moveAmt.y + transform.right * m_moveAmt.x;
-
-        // If the player is considered on the ground...
-        // if (isOnGround)
-        // m_rigidbody.AddForce(moveDirection.normalized * baseCruiseSpeed * 10f, ForceMode.Force);
-        // If the player is considered airborne...
-        // else if (!isOnGround)
-        // m_rigidbody.AddForce(moveDirection.normalized * baseCruiseSpeed * 10f * airMultiplier, ForceMode.Force);
+        if (m_moveAction.IsPressed() && m_moveAmt.x != 0)
+        {
+            transform.RotateAround(player.transform.position, Vector3.up, (baseRotateSpeed * m_moveAmt.x) * Time.deltaTime);
+        }
     }
 
     void SpeedControl()
