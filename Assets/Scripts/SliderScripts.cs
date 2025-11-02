@@ -4,28 +4,20 @@ using UnityEngine.UI;
 public class SliderScripts : MonoBehaviour
 {
     public Slider thisSlider;
-    public float sliderSpeed;
+    private float sliderSpeed = 0f;
     public CanvasGroup uiGroup;
-    public bool performingManual = false;
-    public FailState failState;
+    private bool performingManual = false;
+    private FailState failState;
 
-    public void Start()
+    private void Start()
     {
         uiGroup.alpha = 0f;
-
-        Debug.Log(thisSlider.value);
         failState = GetComponent<FailState>();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.RightShift))
-        {
-            performingManual = true;
-            sliderSpeed = 5f;
-            uiGroup.alpha = 1f;
-        }
 
         if (performingManual)
         {
@@ -43,13 +35,23 @@ public class SliderScripts : MonoBehaviour
                 failState.isDead = true;
                 performingManual = false;
             }
-
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                uiGroup.alpha = 0f;
-                thisSlider.value = 0;
-                performingManual = false;
-            }
         }
     }
+
+    public void ToggleManual(bool boolValue)
+    {
+        if (boolValue)
+        {
+            performingManual = true;
+            uiGroup.alpha = 1f;
+            sliderSpeed = 5f;
+        }
+        else
+        {
+            performingManual = false;
+            uiGroup.alpha = 0f;
+            thisSlider.value = 0;
+        }
+    }
+
 }
