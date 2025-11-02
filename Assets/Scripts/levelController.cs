@@ -182,10 +182,10 @@ public class levelController : MonoBehaviour
             return;
         }
         float comboTimePast = 0f;
-        while (isTricking)
-            comboTimePast += Time.deltaTime;
-            comboTimeLeft = comboTime;
-        sumOfTricks += addedScore * Mathf.FloorToInt(comboTimePast);
+        // while (isTricking)
+        //     comboTimePast += Time.deltaTime;
+        //     comboTimeLeft = comboTime;
+        // sumOfTricks += addedScore * Mathf.FloorToInt(comboTimePast);
     }
 
     void GenerateLevel()
@@ -217,7 +217,7 @@ public class levelController : MonoBehaviour
         // Mapping each module to a cell in a randomized manner
         List<int> mapping = new List<int>();
         int modVal = Random.Range(0, modules.Count);
-        for (int i = 0; i < modules.Count; i++)
+        for (int i = 0; i < (size.x * size.y); i++)
         {
             while (mapping.Contains(modVal))
             { modVal = Random.Range(0, modules.Count); }
