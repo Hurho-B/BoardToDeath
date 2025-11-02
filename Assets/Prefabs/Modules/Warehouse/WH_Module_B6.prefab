@@ -289,6 +289,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2552940543806884212}
+  - component: {fileID: 6867883485919833483}
   m_Layer: 0
   m_Name: WH_Module_B6
   m_TagString: Untagged
@@ -315,6 +316,23 @@ Transform:
   - {fileID: 7031673161072676811}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6867883485919833483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7460675510807627581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f021729b65c4f492fa0314ee7cd95fa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CellBehaviour
+  northCantFaceEdge: 0
+  eastCantFaceEdge: 0
+  southCantFaceEdge: 0
+  westCantFaceEdge: 0
+  spawnPoints: []
 --- !u!1001 &55848994438527525
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6451,7 +6469,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3739974241078515610, guid: b8766a6b234f2f541a6825b174e9bfb1, type: 3}
       propertyPath: m_VersionIndex
-      value: 17215
+      value: 17221
       objectReference: {fileID: 0}
     - target: {fileID: 3866966667511007860, guid: b8766a6b234f2f541a6825b174e9bfb1, type: 3}
       propertyPath: m_LocalPosition.x
