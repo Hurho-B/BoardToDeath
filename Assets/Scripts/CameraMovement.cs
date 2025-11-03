@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class CameraMovement : MonoBehaviour
 {
     //Making the movements of the player public so the camera can reference them
     public Transform orientation;
