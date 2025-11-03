@@ -467,7 +467,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5362614971281846555, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
       propertyPath: groundDrag
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5362614971281846555, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
       propertyPath: jumpCooldown
@@ -478,12 +478,16 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5362614971281846555, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
+      propertyPath: baseCruiseSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5362614971281846555, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
       propertyPath: baseOllieHeight
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5362614971281846555, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
       propertyPath: baseRotateSpeed
-      value: 90
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5362614971281846555, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
       propertyPath: maxOllieSpeedMult
@@ -491,7 +495,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5362614971281846555, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
       propertyPath: maxOllieHeightMult
-      value: 3
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5362614971281846555, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
+      propertyPath: whatIsGround.m_Bits
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 5362614971281846555, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
       propertyPath: ollieSpeedChargeRate
