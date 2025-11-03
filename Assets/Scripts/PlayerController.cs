@@ -70,6 +70,8 @@ public class PlayerController : MonoBehaviour
     private float airDrag;
     private float currentGravity = 0.0f;
     private float currentSpeed = 0.0f;
+    public LayerMask whatIsGround;
+    
 
     private void OnEnable()
     {
@@ -106,25 +108,19 @@ public class PlayerController : MonoBehaviour
     {
         m_moveAmt = m_moveAction.ReadValue<Vector2>();
         m_lookAmt = m_moveAction.ReadValue<Vector2>();
+        isOnGround = Physics.Raycast(transform.position, Vector3.down, 0.2f, whatIsGround);
 
         // drag on ground vs drag in the air, bake into MovePlayer()
-        if (isOnGround)
-        {
-            m_rigidbody.linearDamping = groundDrag;
-            doingJump = false;
-            doingKickflip = false;
-            m_animator.SetBool("isJumping", doingJump);
-        }
-        else
-        {
-            m_rigidbody.linearDamping = 0;
-        }
-
-        // if (m_jumpAction.WasPressedThisFrame() && readyToJump)
+        // if (isOnGround)
         // {
-        //     readyToJump = false;
-        //     Jump();
-        //     Invoke(nameof(ResetJump), jumpCooldown);
+        //     m_rigidbody.linearDamping = groundDrag;
+        //     doingJump = false;
+        //     doingKickflip = false;
+        //     m_animator.SetBool("isJumping", doingJump);
+        // }
+        // else
+        // {
+        //     m_rigidbody.linearDamping = 0;
         // }
 
         if (m_ollieAction.WasPressedThisFrame())
@@ -178,7 +174,9 @@ public class PlayerController : MonoBehaviour
             m_animator.SetBool("kick", doingKickflip);
         }
 
-        MovePlayer(baseCruiseSpeed * ollieSpeedMult);
+        ApplyGravity();
+        AcceleratePlayer(baseCruiseSpeed * ollieSpeedMult);
+        TurnPlayer();
     }
 
     public void CheckIfOnGround()
@@ -203,31 +201,38 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void MovePlayer(float targetSpeed)
+    public void ApplyGravity()
     {
-        Vector3 currentVelocity = m_rigidbody.linearVelocity;
-
         // Apply gravity to the Player, first check is a psudo grounded check.
         // Rework later when grounded check is good to go.
-        // print("Y value changes | " + m_);
-        if (currentVelocity.y > -0.5)
-            currentGravity = 0.5f;
+        float verticalMovement = m_rigidbody.linearVelocity.y;
+        if (verticalMovement > -0.01)
+            currentGravity = 0.01f;
         else if (currentGravity < gravity)
             currentGravity += gravity * Time.deltaTime;
         m_rigidbody.AddForce(Physics.gravity * currentGravity, ForceMode.Acceleration);
+    }
 
-
-        Transform player = transform;
-
-        if (currentVelocity.x > targetSpeed)
-            currentSpeed = targetSpeed;
-        else if (currentSpeed < targetSpeed)
+    public void AcceleratePlayer(float targetSpeed)
+    {
+        // float currentVelocity = m_rigidbody.linearVelocity;
+        if (currentSpeed > targetSpeed + 0.2)
+            currentSpeed -= targetSpeed * Time.deltaTime;
+        else if (currentSpeed < targetSpeed - 0.2)
             currentSpeed += targetSpeed * Time.deltaTime;
-        m_rigidbody.AddForce(player.forward.normalized * targetSpeed * 10f, ForceMode.Acceleration);
+        else
+            currentSpeed = targetSpeed;
+        m_rigidbody.AddForce(transform.forward.normalized * currentSpeed, ForceMode.Acceleration);
 
-        if (m_moveAction.IsPressed() && m_moveAmt.x != 0)
+    }
+
+    public void TurnPlayer()
+    {
+        // Vector3 currentVelocity = m_rigidbody.linearVelocity;
+
+        if (m_moveAmt.x != 0)
         {
-            transform.RotateAround(player.transform.position, Vector3.up, (baseRotateSpeed * m_moveAmt.x) * Time.deltaTime);
+            transform.Rotate(Vector3.up, (baseRotateSpeed * m_moveAmt.x));
         }
     }
 
