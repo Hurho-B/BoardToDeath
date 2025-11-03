@@ -51,6 +51,7 @@ public class SurfaceAlignment : MonoBehaviour
         averageNormal = normalSum / checkedNormals.Length;
 
         // aligns local Y (up) to averageNormal direction
-        transform.rotation = Quaternion.LookRotation(Vector3.forward, averageNormal);
+        Vector3 forward = Vector3.ProjectOnPlane(transform.forward, averageNormal).normalized;
+        transform.rotation = Quaternion.LookRotation(forward, averageNormal);
     }
 }

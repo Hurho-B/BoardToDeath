@@ -91,7 +91,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.05, z: 0}
-  m_LocalScale: {x: 2, y: 0.1, z: 0.75}
+  m_LocalScale: {x: 0.75, y: 0.1, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2958629968391724022}
@@ -218,6 +218,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3622886502835449301}
   - component: {fileID: 4736901677912118416}
+  - component: {fileID: 6029333864173070907}
+  - component: {fileID: 6152054764686067877}
   m_Layer: 0
   m_Name: AlignmentTester
   m_TagString: Untagged
@@ -263,6 +265,35 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
+--- !u!114 &6029333864173070907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3748217316775017302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 708596c23b39dcb49952e66625853c87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VectorMovementCheck
+  lastPos: {x: 0, y: 0, z: 0}
+  currentPos: {x: 0, y: 0, z: 0}
+--- !u!114 &6152054764686067877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3748217316775017302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c0a0173197cc6f42a101fdda4002c32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AutoForward
+  baseSpeed: 3
+  currentSpeed: 0
+  maxSpeed: 20
 --- !u!1 &8932664919169146992
 GameObject:
   m_ObjectHideFlags: 0
