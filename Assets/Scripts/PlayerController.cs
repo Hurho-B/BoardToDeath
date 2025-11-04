@@ -21,27 +21,28 @@ public class PlayerController : MonoBehaviour
     private Animator m_animator;
     private Rigidbody m_rigidbody;
     private Transform m_playerModel;
-
     private Transform currentRail;
 
-    // Declaring conditional bools
-    private bool readyToJump = true;
+    // Declaring states
     public bool isOnGround = true;
-
-    // Declaring animation bools
+    public bool leaningLeft;
+    public bool leaningRight;
+    public bool doingSquat;
     public bool doingJump;
     public bool doingGrab;
-    public bool doingManual;
     public bool doingKickflip;
+    public bool doingManual;
     public bool doingRailGrind;
 
-    // Declaring editable stats
+    [Header("Physics Values")]
+    [Tooltip("Base speed the player will adjust towards.")]
     public float baseCruiseSpeed = 5;
+    [Tooltip("Base degrees per second the player will spin..")]
     public float baseRotateSpeed = 5;
-    public float airMultiplier;
-    public float groundDrag;
-    public float jumpForce;
-    public float jumpCooldown;
+    [Tooltip("The rate per second the player will fall at.")]
+    private float gravity = 9.8f;
+    [Tooltip("The tag that an object must have to be considered ground.")]
+    public LayerMask whatIsGround;
 
     [Header("Ollie Jump Values")]
     [Tooltip("The base ollie height without charging.")]
@@ -65,14 +66,8 @@ public class PlayerController : MonoBehaviour
     private float ollieHeightMult = 1f;
     private float ollieSpeedMult = 1f;
     private float newOllieHeight;
-
-    // [Header("Physics Values")]
-    private float gravity = 9.8f;
-
-    private float airDrag;
     private float currentGravity = 0.0f;
     private float currentSpeed = 0.0f;
-    public LayerMask whatIsGround;
     
 
     private void OnEnable()
@@ -113,44 +108,9 @@ public class PlayerController : MonoBehaviour
         m_lookAmt = m_moveAction.ReadValue<Vector2>();
         isOnGround = Physics.Raycast(transform.position, Vector3.down, 0.2f, whatIsGround);
 
-        // drag on ground vs drag in the air, bake into MovePlayer()
-        // if (isOnGround)
-        // {
-        //     m_rigidbody.linearDamping = groundDrag;
-        //     doingJump = false;
-        //     doingKickflip = false;
-        //     m_animator.SetBool("isJumping", doingJump);
-        // }
-        // else
-        // {
-        //     m_rigidbody.linearDamping = 0;
-        // }
-
-        if (m_ollieAction.WasPressedThisFrame())
+        if (m_ollieAction.IsPressed())
         {
-            if (doingManual)
-            {
-                doingManual = false;
-                // sliderScript.ToggleManual(doingManual);
-                m_animator.SetBool("manny", doingManual);
-            }
-        }
-        else if (m_ollieAction.IsPressed())
-        {
-            delayTime += Time.deltaTime;
-            if (delayTime > delayBeforeOllieSpeedCharge)
-                if (ollieSpeedMult < maxOllieSpeedMult)
-                    ollieSpeedMult += ollieSpeedChargeRate * Time.deltaTime;
-            if (delayTime > delayBeforeOllieHeightCharge)
-                if (ollieHeightMult < maxOllieHeightMult)
-                    ollieHeightMult += ollieHeightChargeRate * Time.deltaTime;
-        }
-        else if (m_ollieAction.WasReleasedThisFrame())
-        {
-            m_rigidbody.AddForce(transform.up * (baseOllieHeight * ollieHeightMult), ForceMode.Impulse);
-            delayTime = 0f;
-            ollieHeightMult = 1f;
-            ollieSpeedMult = 1f;
+            PerformingOllie();
         }
 
         if (m_manualAction.WasPressedThisFrame())
@@ -167,7 +127,6 @@ public class PlayerController : MonoBehaviour
                 // sliderScript.ToggleManual(doingManual);
                 m_animator.SetBool("manny", doingManual);
             }
-
         }
 
         if (m_kickflipAction.WasPressedThisFrame() && !isOnGround)
@@ -239,15 +198,38 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void SpeedControl()
+    void PerformingOllie()
     {
-        Vector3 flatVel = new Vector3(m_rigidbody.linearVelocity.x, 0f, m_rigidbody.linearVelocity.z);
-
-        //Max speed
-        if (flatVel.magnitude > baseCruiseSpeed)
+        if (m_ollieAction.WasPressedThisFrame())
         {
-            Vector3 limitedVel = flatVel.normalized * baseCruiseSpeed;
-            m_rigidbody.linearVelocity = new Vector3(limitedVel.x, m_rigidbody.linearVelocity.y, limitedVel.z);
+            if (doingManual)
+            {
+                doingManual = false;
+                // sliderScript.ToggleManual(doingManual);
+                m_animator.SetBool("manny", doingManual);
+            }
+        }
+        else if (m_ollieAction.IsPressed())
+        {
+            doingSquat = true;
+            delayTime += Time.deltaTime;
+            if (delayTime > delayBeforeOllieSpeedCharge)
+                if (ollieSpeedMult < maxOllieSpeedMult)
+                    ollieSpeedMult += ollieSpeedChargeRate * Time.deltaTime;
+            if (delayTime > delayBeforeOllieHeightCharge)
+                if (ollieHeightMult < maxOllieHeightMult)
+                    ollieHeightMult += ollieHeightChargeRate * Time.deltaTime;
+        }
+        else if (m_ollieAction.WasReleasedThisFrame())
+        {
+            doingSquat = false;
+            doingJump = true;
+            m_animator.Setbool("doingSquat", doingSquat);
+            m_animator.Setbool("doingJump", doingJump);
+            m_rigidbody.AddForce(transform.up * (baseOllieHeight * ollieHeightMult), ForceMode.Impulse);
+            delayTime = 0f;
+            ollieHeightMult = 1f;
+            ollieSpeedMult = 1f;
         }
     }
 
