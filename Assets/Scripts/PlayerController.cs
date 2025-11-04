@@ -20,26 +20,29 @@ public class PlayerController : MonoBehaviour
     private Vector2 m_lookAmt;
     private Animator m_animator;
     private Rigidbody m_rigidbody;
+    private Transform m_playerModel;
     private Transform currentRail;
 
-    // Declaring conditional bools
-    private bool readyToJump = true;
+    // Declaring states
     public bool isOnGround = true;
-
-    // Declaring animation bools
+    public bool tiltingLeft;
+    public bool tiltingRight;
+    public bool doingSquat;
     public bool doingJump;
     public bool doingGrab;
-    public bool doingManual;
     public bool doingKickflip;
+    public bool doingManual;
     public bool doingRailGrind;
 
-    // Declaring editable stats
+    [Header("Physics Values")]
+    [Tooltip("Base speed the player will adjust towards.")]
     public float baseCruiseSpeed = 5;
+    [Tooltip("Base degrees per second the player will spin..")]
     public float baseRotateSpeed = 5;
-    public float airMultiplier;
-    public float groundDrag;
-    public float jumpForce;
-    public float jumpCooldown;
+    [Tooltip("The rate per second the player will fall at.")]
+    private float gravity = 9.8f;
+    [Tooltip("The tag that an object must have to be considered ground.")]
+    public LayerMask whatIsGround;
 
     [Header("Ollie Jump Values")]
     [Tooltip("The base ollie height without charging.")]
@@ -63,14 +66,8 @@ public class PlayerController : MonoBehaviour
     private float ollieHeightMult = 1f;
     private float ollieSpeedMult = 1f;
     private float newOllieHeight;
-
-    // [Header("Physics Values")]
-    private float gravity = 9.8f;
-
-    private float airDrag;
     private float currentGravity = 0.0f;
     private float currentSpeed = 0.0f;
-    public LayerMask whatIsGround;
     
 
     private void OnEnable()
@@ -100,40 +97,100 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
+    // void FixedUpdate()
     void Update()
     {
         m_moveAmt = m_moveAction.ReadValue<Vector2>();
         m_lookAmt = m_moveAction.ReadValue<Vector2>();
         isOnGround = Physics.Raycast(transform.position, Vector3.down, 0.2f, whatIsGround);
 
-        // drag on ground vs drag in the air, bake into MovePlayer()
-        // if (isOnGround)
-        // {
-        //     m_rigidbody.linearDamping = groundDrag;
-        //     doingJump = false;
-        //     doingKickflip = false;
-        //     m_animator.SetBool("isJumping", doingJump);
-        // }
-        // else
-        // {
-        //     m_rigidbody.linearDamping = 0;
-        // }
+        if (m_ollieAction.IsPressed())
+        {
+            PerformingOllie();
+        }
 
+        if (m_manualAction.WasPressedThisFrame() && isOnGround)
+        {
+            PerformingManual();
+        }
+
+        if (m_kickflipAction.WasPressedThisFrame() && !isOnGround)
+        {
+            doingKickflip = true;
+            m_animator.SetBool("kick", doingKickflip);
+        }
+
+        SetState();
+        ApplyGravity();
+        AcceleratePlayer(baseCruiseSpeed * ollieSpeedMult);
+        TurnPlayer();
+    }
+
+    public void CheckIfOnGround()
+    {
+        RaycastHit hit;
+        //                  origin              direction     hitinfo  MaxDistance
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.17f))
+        {
+            Vector3 surfaceNormal = hit.normal; //stores normals of surface hit by raycast
+            Quaternion targetRotation = Quaternion.FromToRotation(transform.up, surfaceNormal) * transform.rotation;
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10);
+        }
+    }
+
+    public void ApplyGravity()
+    {
+        // Apply gravity to the Player, first check is a psudo grounded check.
+        // Rework later when grounded check is good to go.
+        float verticalMovement = m_rigidbody.linearVelocity.y;
+        if (verticalMovement > -0.01)
+            currentGravity = 0.0f;
+        else if (currentGravity < gravity)
+            currentGravity += gravity * Time.deltaTime;
+        m_rigidbody.AddForce(Physics.gravity * currentGravity, ForceMode.Force);
+    }
+
+    public void AcceleratePlayer(float targetSpeed)
+    {
+        if (currentSpeed > targetSpeed + 0.2)
+            currentSpeed -= targetSpeed * Time.deltaTime;
+        else if (currentSpeed < targetSpeed - 0.2)
+            currentSpeed += targetSpeed * Time.deltaTime;
+        else
+            currentSpeed = targetSpeed;
+        // transform.position += transform.forward * currentSpeed * Time.deltaTime;
+        // transform.Translate(transform.forward * currentSpeed * Time.deltaTime);
+        m_rigidbody.AddForce(transform.forward * currentSpeed, ForceMode.Force);
+    }
+
+    public void TurnPlayer()
+    {
+        // Vector3 currentVelocity = m_rigidbody.linearVelocity;
+
+        if (m_moveAction.IsPressed())
+        {
+            Quaternion deltaRotation = Quaternion.Euler(new Vector3(0, baseRotateSpeed, 0) * m_moveAmt.x * Time.deltaTime);
+            m_rigidbody.MoveRotation(m_rigidbody.rotation * deltaRotation);
+        }
+    }
+
+    void PerformingOllie()
+    {
         if (m_ollieAction.WasPressedThisFrame())
         {
             if (doingManual)
             {
                 doingManual = false;
                 // sliderScript.ToggleManual(doingManual);
-                m_animator.SetBool("manny", doingManual);
             }
         }
         else if (m_ollieAction.IsPressed())
         {
+            doingSquat = true;
             delayTime += Time.deltaTime;
             if (delayTime > delayBeforeOllieSpeedCharge)
                 if (ollieSpeedMult < maxOllieSpeedMult)
@@ -144,108 +201,38 @@ public class PlayerController : MonoBehaviour
         }
         else if (m_ollieAction.WasReleasedThisFrame())
         {
-            currentGravity = 0f;
+            doingSquat = false;
+            doingJump = true;
             m_rigidbody.AddForce(transform.up * (baseOllieHeight * ollieHeightMult), ForceMode.Impulse);
             delayTime = 0f;
             ollieHeightMult = 1f;
             ollieSpeedMult = 1f;
         }
+    }
 
-        if (m_manualAction.WasPressedThisFrame())
+    public void PerformingManual()
+    {
+        if (isOnGround && !doingManual)
         {
-            if (isOnGround && !doingManual)
-            {
-                doingManual = true;
-                // sliderScript.ToggleManual(doingManual);
-                m_animator.SetBool("manny", doingManual);
-            }
-            else if (isOnGround && doingManual)
-            {
-                doingManual = false;
-                // sliderScript.ToggleManual(doingManual);
-                m_animator.SetBool("manny", doingManual);
-            }
-
+            doingManual = true;
+            // sliderScript.ToggleManual(doingManual);
         }
-
-        if (m_kickflipAction.WasPressedThisFrame() && !isOnGround)
+        else if (isOnGround && doingManual)
         {
-            doingKickflip = true;
-            m_animator.SetBool("kick", doingKickflip);
-        }
-
-        ApplyGravity();
-        AcceleratePlayer(baseCruiseSpeed * ollieSpeedMult);
-        TurnPlayer();
-    }
-
-    public void CheckIfOnGround()
-    {
-        // Checks below all 4 wheels to determine if the skateboard is isOnGround
-        // RaycastHit[] wheels = new RaycastHit[4];
-        // foreach (RaycaseHit wheel in wheels)
-        // {
-        // 
-        // }
-
-        RaycastHit hit;
-        //                  origin              direction     hitinfo  MaxDistance
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.17f))
-        {
-            Vector3 surfaceNormal = hit.normal; //stores normals of surface hit by raycast
-            Quaternion targetRotation = Quaternion.FromToRotation(transform.up, surfaceNormal) * transform.rotation;
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10);
-        }
-
-        m_animator.SetBool("grounded", isOnGround);
-
-    }
-
-    public void ApplyGravity()
-    {
-        // Apply gravity to the Player, first check is a psudo grounded check.
-        // Rework later when grounded check is good to go.
-        float verticalMovement = m_rigidbody.linearVelocity.y;
-        if (verticalMovement > -0.01)
-            currentGravity = 0.01f;
-        else if (currentGravity < gravity)
-            currentGravity += gravity * Time.deltaTime;
-        m_rigidbody.AddForce(Physics.gravity * currentGravity, ForceMode.Acceleration);
-    }
-
-    public void AcceleratePlayer(float targetSpeed)
-    {
-        // float currentVelocity = m_rigidbody.linearVelocity;
-        if (currentSpeed > targetSpeed + 0.2)
-            currentSpeed -= targetSpeed * Time.deltaTime;
-        else if (currentSpeed < targetSpeed - 0.2)
-            currentSpeed += targetSpeed * Time.deltaTime;
-        else
-            currentSpeed = targetSpeed;
-        m_rigidbody.AddForce(transform.forward.normalized * currentSpeed, ForceMode.Acceleration);
-
-    }
-
-    public void TurnPlayer()
-    {
-        // Vector3 currentVelocity = m_rigidbody.linearVelocity;
-
-        if (m_moveAmt.x != 0)
-        {
-            transform.Rotate(Vector3.up, (baseRotateSpeed * m_moveAmt.x));
+            doingManual = false;
+            // sliderScript.ToggleManual(doingManual);
         }
     }
 
-    void SpeedControl()
+    public void SetState()
     {
-        Vector3 flatVel = new Vector3(m_rigidbody.linearVelocity.x, 0f, m_rigidbody.linearVelocity.z);
+        m_animator.SetFloat("Speed", currentSpeed);
+        m_animator.SetBool("DoSquat", doingSquat);
+        m_animator.SetBool("IsGrounded", isOnGround);
+        m_animator.SetBool("TiltingLeft", tiltingLeft);
+        m_animator.SetBool("TiltingRight", tiltingRight);
 
-        //Max speed
-        if (flatVel.magnitude > baseCruiseSpeed)
-        {
-            Vector3 limitedVel = flatVel.normalized * baseCruiseSpeed;
-            m_rigidbody.linearVelocity = new Vector3(limitedVel.x, m_rigidbody.linearVelocity.y, limitedVel.z);
-        }
+        m_animator.SetBool("DoingManual", doingManual);
     }
 
     void Grab()
