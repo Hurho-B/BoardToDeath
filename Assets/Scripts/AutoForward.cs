@@ -17,5 +17,10 @@ public class AutoForward : MonoBehaviour
 
         transform.position += transform.forward * currentSpeed * Time.deltaTime;
 
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            maxSpeed = maxSpeed * 1.5f;
+        }
     }
 }

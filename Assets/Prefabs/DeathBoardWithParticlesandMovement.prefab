@@ -40,10 +40,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3622886502835449301}
+  - component: {fileID: 893347744134924727}
+  - component: {fileID: 6152054764686067877}
   - component: {fileID: 4736901677912118416}
   - component: {fileID: 6029333864173070907}
-  - component: {fileID: 6152054764686067877}
-  - component: {fileID: 893347744134924727}
+  - component: {fileID: 8861965108258628326}
+  - component: {fileID: 4298476584811422181}
   m_Layer: 0
   m_Name: DeathBoardWithParticlesandMovement
   m_TagString: Untagged
@@ -69,6 +71,42 @@ Transform:
   - {fileID: 6806532039286027439}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &893347744134924727
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3748217316775017302}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.1, y: 0.15, z: 0.1}
+  m_Center: {x: 0, y: 0.1, z: 0.43}
+--- !u!114 &6152054764686067877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3748217316775017302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c0a0173197cc6f42a101fdda4002c32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AutoForward
+  baseSpeed: 3
+  currentSpeed: 0
+  maxSpeed: 20
 --- !u!114 &4736901677912118416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,7 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VectorMovementCheck
   lastPos: {x: 0, y: 0, z: 0}
   currentPos: {x: 0, y: 0, z: 0}
---- !u!114 &6152054764686067877
+--- !u!114 &8861965108258628326
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -114,33 +152,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 3748217316775017302}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c0a0173197cc6f42a101fdda4002c32, type: 3}
+  m_Script: {fileID: 11500000, guid: 1ebb1125a539ffc4ab5c3a4db4940e58, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AutoForward
-  baseSpeed: 3
-  currentSpeed: 0
-  maxSpeed: 20
---- !u!65 &893347744134924727
-BoxCollider:
+  m_EditorClassIdentifier: Assembly-CSharp::Rotater
+  turnForce: 200
+--- !u!114 &4298476584811422181
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3748217316775017302}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.1, y: 0.15, z: 0.1}
-  m_Center: {x: 0, y: 0.1, z: 0.43}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: affc9f15b6ff77345a58b14195921041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CollisionHandler
+  boardNose: {fileID: 893347744134924727}
 --- !u!1 &4596334130709997465
 GameObject:
   m_ObjectHideFlags: 0
