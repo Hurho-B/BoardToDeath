@@ -4,6 +4,7 @@ public class AutoForward : MonoBehaviour
 {
     public float baseSpeed;
     public float currentSpeed;
+    public float defaultMaxSpeed = 20;
     public float maxSpeed;
 
     public Animator skateAnimator;
@@ -23,10 +24,15 @@ public class AutoForward : MonoBehaviour
 
         if (Input.GetKey(KeyCode.S))
         {
-            maxSpeed--;
+            maxSpeed-= baseSpeed * 1.5f * Time.deltaTime;
             if (maxSpeed < 0)
-            { maxSpeed = 0; }
+            { 
+                maxSpeed = 0; 
+            }
         }
-        else { maxSpeed = 10; }
+        else 
+        { 
+            maxSpeed = defaultMaxSpeed; 
+        }
     }
 }
