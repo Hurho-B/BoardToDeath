@@ -100,10 +100,11 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
+    // void FixedUpdate()
     void Update()
     {
         m_moveAmt = m_moveAction.ReadValue<Vector2>();
@@ -144,7 +145,6 @@ public class PlayerController : MonoBehaviour
         }
         else if (m_ollieAction.WasReleasedThisFrame())
         {
-            currentGravity = 0f;
             m_rigidbody.AddForce(transform.up * (baseOllieHeight * ollieHeightMult), ForceMode.Impulse);
             delayTime = 0f;
             ollieHeightMult = 1f;
@@ -207,32 +207,32 @@ public class PlayerController : MonoBehaviour
         // Rework later when grounded check is good to go.
         float verticalMovement = m_rigidbody.linearVelocity.y;
         if (verticalMovement > -0.01)
-            currentGravity = 0.01f;
+            currentGravity = 0.0f;
         else if (currentGravity < gravity)
             currentGravity += gravity * Time.deltaTime;
-        m_rigidbody.AddForce(Physics.gravity * currentGravity, ForceMode.Acceleration);
+        m_rigidbody.AddForce(Physics.gravity * currentGravity, ForceMode.Force);
     }
 
     public void AcceleratePlayer(float targetSpeed)
     {
-        // float currentVelocity = m_rigidbody.linearVelocity;
         if (currentSpeed > targetSpeed + 0.2)
             currentSpeed -= targetSpeed * Time.deltaTime;
         else if (currentSpeed < targetSpeed - 0.2)
             currentSpeed += targetSpeed * Time.deltaTime;
         else
             currentSpeed = targetSpeed;
-        m_rigidbody.AddForce(transform.forward.normalized * currentSpeed, ForceMode.Acceleration);
-
+        // transform.position += transform.forward * currentSpeed * Time.deltaTime;
+        m_rigidbody.AddForce(transform.forward * currentSpeed, ForceMode.Force);
     }
 
     public void TurnPlayer()
     {
         // Vector3 currentVelocity = m_rigidbody.linearVelocity;
 
-        if (m_moveAmt.x != 0)
+        if (m_moveAction.IsPressed())
         {
-            transform.Rotate(Vector3.up, (baseRotateSpeed * m_moveAmt.x));
+            // m_rigidbody.rotation = Quaternion.Euler(0, baseRotateSpeed, 0);
+            transform.Rotate(new Vector3(0, 1, 0) * Time.deltaTime * baseRotateSpeed, Space.World);
         }
     }
 
