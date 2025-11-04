@@ -108,10 +108,7 @@ public class PlayerController : MonoBehaviour
         m_lookAmt = m_moveAction.ReadValue<Vector2>();
         isOnGround = Physics.Raycast(transform.position, Vector3.down, 0.2f, whatIsGround);
 
-        if (m_ollieAction.IsPressed())
-        {
-            PerformingOllie();
-        }
+        PerformingOllie();
 
         if (m_manualAction.WasPressedThisFrame() && isOnGround)
         {
