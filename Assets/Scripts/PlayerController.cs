@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 m_lookAmt;
     private Animator m_animator;
     private Rigidbody m_rigidbody;
+    private Transform m_playerModel;
+
     private Transform currentRail;
 
     // Declaring conditional bools
@@ -222,6 +224,7 @@ public class PlayerController : MonoBehaviour
         else
             currentSpeed = targetSpeed;
         // transform.position += transform.forward * currentSpeed * Time.deltaTime;
+        // transform.Translate(transform.forward * currentSpeed * Time.deltaTime);
         m_rigidbody.AddForce(transform.forward * currentSpeed, ForceMode.Force);
     }
 
@@ -231,8 +234,8 @@ public class PlayerController : MonoBehaviour
 
         if (m_moveAction.IsPressed())
         {
-            // m_rigidbody.rotation = Quaternion.Euler(0, baseRotateSpeed, 0);
-            transform.Rotate(new Vector3(0, 1, 0) * Time.deltaTime * baseRotateSpeed, Space.World);
+            Quaternion deltaRotation = Quaternion.Euler(new Vector3(0, baseRotateSpeed, 0) * m_moveAmt.x * Time.deltaTime);
+            m_rigidbody.MoveRotation(m_rigidbody.rotation * deltaRotation);
         }
     }
 
