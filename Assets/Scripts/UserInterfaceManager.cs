@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -27,9 +28,20 @@ public class UserInterfaceManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.Escape) && !start && !settings)
+        if (Input.GetKeyDown(KeyCode.Escape) && !start && !settings)
         {
-            pauseMenu.SetActive(true);
+            if (!pause)
+            {
+                pauseMenu.SetActive(true);
+                Time.timeScale = 0;
+                pause = true;
+            }
+            else if (pause)
+            {
+                pauseMenu.SetActive(false);
+                Time.timeScale = 1;
+                pause = false;
+            }
         }
     }
 
@@ -41,7 +53,7 @@ public class UserInterfaceManager : MonoBehaviour
         startMenu.SetActive(false);
         start = false;
 
-        SceneManager.LoadScene("BtD PROTOTYPE SCENE");
+        SceneManager.LoadScene("ShowcaseLevel");
     }
     public void OpenSettings()
     {
@@ -58,10 +70,9 @@ public class UserInterfaceManager : MonoBehaviour
 
     public void BackToStart()
     {
-        startMenu.SetActive(true);
-        start = true;
-        settingsMenu.SetActive(false);
-        settings = false;
+        SceneManager.LoadScene("StartZone");
+        Time.timeScale = 1;
+        Destroy(gameObject);
     }
 
 }

@@ -3079,7 +3079,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3748217316775017302, guid: dddeeea932b265a4ea47b4a2d501c7e0, type: 3}
   m_PrefabInstance: {fileID: 1867793770}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1328670487
+--- !u!114 &1328670493
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3088,26 +3088,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1328670484}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 708596c23b39dcb49952e66625853c87, type: 3}
+  m_Script: {fileID: 11500000, guid: 1ebb1125a539ffc4ab5c3a4db4940e58, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::VectorMovementCheck
-  lastPos: {x: 0, y: 0, z: 0}
-  currentPos: {x: 0, y: 0, z: 0}
---- !u!114 &1328670488
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1328670484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c0a0173197cc6f42a101fdda4002c32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AutoForward
-  baseSpeed: 3
-  currentSpeed: 0
-  maxSpeed: 20
+  m_EditorClassIdentifier: Assembly-CSharp::Rotater
+  turnForce: 200
 --- !u!1 &1330796258
 GameObject:
   m_ObjectHideFlags: 0
@@ -4808,16 +4792,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: AlignmentTester
       objectReference: {fileID: 0}
+    - target: {fileID: 6152054764686067877, guid: dddeeea932b265a4ea47b4a2d501c7e0, type: 3}
+      propertyPath: maxSpeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6152054764686067877, guid: dddeeea932b265a4ea47b4a2d501c7e0, type: 3}
+      propertyPath: baseSpeed
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3748217316775017302, guid: dddeeea932b265a4ea47b4a2d501c7e0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1328670487}
-    - targetCorrespondingSourceObject: {fileID: 3748217316775017302, guid: dddeeea932b265a4ea47b4a2d501c7e0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1328670488}
+      addedObject: {fileID: 1328670493}
   m_SourcePrefab: {fileID: 100100000, guid: dddeeea932b265a4ea47b4a2d501c7e0, type: 3}
 --- !u!1001 &1900541771
 PrefabInstance:
