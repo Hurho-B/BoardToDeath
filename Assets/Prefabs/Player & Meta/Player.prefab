@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 9201405741381340901}
   - component: {fileID: 7780332745883062677}
   - component: {fileID: 5362614971281846555}
+  - component: {fileID: 6761052685617180706}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -152,6 +153,28 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 0
+--- !u!114 &6761052685617180706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5050669956948589875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0fd98034904dcc4887d8c1d84d1b8e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceAlignment
+  wheelContacts:
+  - {fileID: 4375828274191530891}
+  - {fileID: 9003162085265662040}
+  - {fileID: 2930104912699228477}
+  - {fileID: 2146959814243137252}
+  checkedNormals:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
 --- !u!1001 &1505927719906991532
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -445,6 +468,16 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 4524568148503828795}
   m_SourcePrefab: {fileID: 100100000, guid: 4a20fd156c05fc741b5e25bdd2e6bc43, type: 3}
+--- !u!4 &2146959814243137252 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2974637336586596102, guid: 4a20fd156c05fc741b5e25bdd2e6bc43, type: 3}
+  m_PrefabInstance: {fileID: 3784009359535348194}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2930104912699228477 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2029525369266837727, guid: 4a20fd156c05fc741b5e25bdd2e6bc43, type: 3}
+  m_PrefabInstance: {fileID: 3784009359535348194}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3677533293276233225 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4a20fd156c05fc741b5e25bdd2e6bc43, type: 3}
@@ -500,3 +533,13 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!4 &4375828274191530891 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 592664080621265513, guid: 4a20fd156c05fc741b5e25bdd2e6bc43, type: 3}
+  m_PrefabInstance: {fileID: 3784009359535348194}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &9003162085265662040 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4003092854873392710, guid: 4a20fd156c05fc741b5e25bdd2e6bc43, type: 3}
+  m_PrefabInstance: {fileID: 3784009359535348194}
+  m_PrefabAsset: {fileID: 0}
