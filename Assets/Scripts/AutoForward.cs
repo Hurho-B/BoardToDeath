@@ -6,6 +6,8 @@ public class AutoForward : MonoBehaviour
     public float currentSpeed;
     public float maxSpeed;
 
+    public Animator skateAnimator;
+
     void Update()
     {
         currentSpeed += baseSpeed * Time.deltaTime;
@@ -17,10 +19,14 @@ public class AutoForward : MonoBehaviour
 
         transform.position += transform.forward * currentSpeed * Time.deltaTime;
 
+        skateAnimator.SetFloat("Speed", currentSpeed);
 
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.S))
         {
-            maxSpeed = maxSpeed * 1.5f;
+            maxSpeed--;
+            if (maxSpeed < 0)
+            { maxSpeed = 0; }
         }
+        else { maxSpeed = 10; }
     }
 }
