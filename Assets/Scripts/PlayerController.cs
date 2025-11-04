@@ -25,8 +25,8 @@ public class PlayerController : MonoBehaviour
 
     // Declaring states
     public bool isOnGround = true;
-    public bool leaningLeft;
-    public bool leaningRight;
+    public bool tiltingLeft;
+    public bool tiltingRight;
     public bool doingSquat;
     public bool doingJump;
     public bool doingGrab;
@@ -113,20 +113,9 @@ public class PlayerController : MonoBehaviour
             PerformingOllie();
         }
 
-        if (m_manualAction.WasPressedThisFrame())
+        if (m_manualAction.WasPressedThisFrame() && isOnGround)
         {
-            if (isOnGround && !doingManual)
-            {
-                doingManual = true;
-                // sliderScript.ToggleManual(doingManual);
-                m_animator.SetBool("manny", doingManual);
-            }
-            else if (isOnGround && doingManual)
-            {
-                doingManual = false;
-                // sliderScript.ToggleManual(doingManual);
-                m_animator.SetBool("manny", doingManual);
-            }
+            PerformingManual();
         }
 
         if (m_kickflipAction.WasPressedThisFrame() && !isOnGround)
@@ -135,6 +124,7 @@ public class PlayerController : MonoBehaviour
             m_animator.SetBool("kick", doingKickflip);
         }
 
+        SetState();
         ApplyGravity();
         AcceleratePlayer(baseCruiseSpeed * ollieSpeedMult);
         TurnPlayer();
@@ -142,13 +132,6 @@ public class PlayerController : MonoBehaviour
 
     public void CheckIfOnGround()
     {
-        // Checks below all 4 wheels to determine if the skateboard is isOnGround
-        // RaycastHit[] wheels = new RaycastHit[4];
-        // foreach (RaycaseHit wheel in wheels)
-        // {
-        // 
-        // }
-
         RaycastHit hit;
         //                  origin              direction     hitinfo  MaxDistance
         if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.17f))
@@ -157,9 +140,6 @@ public class PlayerController : MonoBehaviour
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, surfaceNormal) * transform.rotation;
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10);
         }
-
-        m_animator.SetBool("grounded", isOnGround);
-
     }
 
     public void ApplyGravity()
@@ -206,7 +186,6 @@ public class PlayerController : MonoBehaviour
             {
                 doingManual = false;
                 // sliderScript.ToggleManual(doingManual);
-                m_animator.SetBool("manny", doingManual);
             }
         }
         else if (m_ollieAction.IsPressed())
@@ -224,13 +203,36 @@ public class PlayerController : MonoBehaviour
         {
             doingSquat = false;
             doingJump = true;
-            m_animator.Setbool("doingSquat", doingSquat);
-            m_animator.Setbool("doingJump", doingJump);
             m_rigidbody.AddForce(transform.up * (baseOllieHeight * ollieHeightMult), ForceMode.Impulse);
             delayTime = 0f;
             ollieHeightMult = 1f;
             ollieSpeedMult = 1f;
         }
+    }
+
+    public void PerformingManual()
+    {
+        if (isOnGround && !doingManual)
+        {
+            doingManual = true;
+            // sliderScript.ToggleManual(doingManual);
+        }
+        else if (isOnGround && doingManual)
+        {
+            doingManual = false;
+            // sliderScript.ToggleManual(doingManual);
+        }
+    }
+
+    public void SetState()
+    {
+        m_animator.SetFloat("Speed", currentSpeed);
+        m_animator.SetBool("DoSquat", doingSquat);
+        m_animator.SetBool("IsGrounded", isOnGround);
+        m_animator.SetBool("TiltingLeft", tiltingLeft);
+        m_animator.SetBool("TiltingRight", tiltingRight);
+
+        m_animator.SetBool("DoingManual", doingManual);
     }
 
     void Grab()
