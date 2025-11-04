@@ -244,11 +244,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 736231d04df351bac81fa7d690b1e8e8, type: 3}
---- !u!4 &119574330 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 900765861936582413, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
-  m_PrefabInstance: {fileID: 425485232}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &127638978 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3677533293276233225, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
@@ -509,12 +504,20 @@ PrefabInstance:
       propertyPath: ollieHeightChargeRate
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6761052685617180706, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9201405741381340901, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
       propertyPath: m_Mass
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9201405741381340901, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
       propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9201405741381340901, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
+      propertyPath: m_CollisionDetection
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -748,7 +751,7 @@ PrefabInstance:
     - target: {fileID: 5753956731688364724, guid: 9256276db2f71117899a1b06f3fa8d48, type: 3}
       propertyPath: orientation
       value: 
-      objectReference: {fileID: 119574330}
+      objectReference: {fileID: 1995399504}
     - target: {fileID: 5753956731688364724, guid: 9256276db2f71117899a1b06f3fa8d48, type: 3}
       propertyPath: playerModel
       value: 
@@ -889,6 +892,11 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!4 &1995399504 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5859424635211471858, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
+  m_PrefabInstance: {fileID: 425485232}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
