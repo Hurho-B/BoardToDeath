@@ -244,11 +244,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 736231d04df351bac81fa7d690b1e8e8, type: 3}
---- !u!4 &127638978 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3677533293276233225, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
-  m_PrefabInstance: {fileID: 425485232}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &177129462 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8177039442601595203, guid: 4d0df6ec103318588bb71e0dc85d8708, type: 3}
@@ -412,6 +407,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4524568148503828795, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4670989258347006958, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -456,9 +455,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5050669956948589875, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5362614971281846555, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
       propertyPath: jumpForce
       value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 5362614971281846555, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5362614971281846555, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
       propertyPath: groundDrag
@@ -482,7 +489,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5362614971281846555, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
       propertyPath: baseRotateSpeed
-      value: 180
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 5362614971281846555, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
       propertyPath: maxOllieSpeedMult
@@ -507,6 +514,10 @@ PrefabInstance:
     - target: {fileID: 6761052685617180706, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7780332745883062677, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9201405741381340901, guid: a7a8eef09cb3ff643b1b3f15e52a0cd5, type: 3}
       propertyPath: m_Mass
@@ -747,7 +758,11 @@ PrefabInstance:
     - target: {fileID: 5753956731688364724, guid: 9256276db2f71117899a1b06f3fa8d48, type: 3}
       propertyPath: player
       value: 
-      objectReference: {fileID: 1798930936}
+      objectReference: {fileID: 0}
+    - target: {fileID: 5753956731688364724, guid: 9256276db2f71117899a1b06f3fa8d48, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5753956731688364724, guid: 9256276db2f71117899a1b06f3fa8d48, type: 3}
       propertyPath: orientation
       value: 
@@ -755,7 +770,7 @@ PrefabInstance:
     - target: {fileID: 5753956731688364724, guid: 9256276db2f71117899a1b06f3fa8d48, type: 3}
       propertyPath: playerModel
       value: 
-      objectReference: {fileID: 127638978}
+      objectReference: {fileID: 0}
     - target: {fileID: 8067399796171258626, guid: 9256276db2f71117899a1b06f3fa8d48, type: 3}
       propertyPath: m_Name
       value: Cameras
