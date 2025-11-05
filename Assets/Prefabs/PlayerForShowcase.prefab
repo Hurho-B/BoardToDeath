@@ -45,8 +45,10 @@ GameObject:
   - component: {fileID: 6029333864173070907}
   - component: {fileID: 8861965108258628326}
   - component: {fileID: 4298476584811422181}
+  - component: {fileID: 2813554308860483307}
+  - component: {fileID: 6867864799385345593}
   m_Layer: 0
-  m_Name: DeathBoardWithParticlesandMovement
+  m_Name: PlayerForShowcase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,9 +88,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c0a0173197cc6f42a101fdda4002c32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AutoForward
-  baseSpeed: 3
+  baseSpeed: 7
   currentSpeed: 0
-  maxSpeed: 20
+  maxSpeed: 10
   skateAnimator: {fileID: 5688758672793641823}
 --- !u!114 &4736901677912118416
 MonoBehaviour:
@@ -97,7 +99,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3748217316775017302}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c0fd98034904dcc4887d8c1d84d1b8e9, type: 3}
   m_Name: 
@@ -138,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ebb1125a539ffc4ab5c3a4db4940e58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Rotater
-  turnForce: 200
+  turnForce: 100
 --- !u!114 &4298476584811422181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,6 +153,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: affc9f15b6ff77345a58b14195921041, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CollisionHandler
+--- !u!114 &2813554308860483307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3748217316775017302}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 219767d026941a049bb88add3e0b2087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ApplyGravity
+  gravity: 9.81
+--- !u!114 &6867864799385345593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3748217316775017302}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b821751500c9004a92f11482cb95e3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NormalForce
+  gravity: {fileID: 2813554308860483307}
+  alignmentScript: {fileID: 4736901677912118416}
+  groundCoordinate: {x: 0, y: 0, z: 0}
+  distanceToGround: 0
+  groundLevel: 0
 --- !u!1 &5311764351861448727
 GameObject:
   m_ObjectHideFlags: 0
@@ -448,10 +480,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6547223059409353530, guid: 2e5a9033a895c5d43bbb4b143fbc74ba, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6d1e7c5b299647d4b99110b520b6ab52, type: 2}
+    - target: {fileID: -1909878425617812780, guid: 2e5a9033a895c5d43bbb4b143fbc74ba, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6d1e7c5b299647d4b99110b520b6ab52, type: 2}
+    - target: {fileID: -666985854777507172, guid: 2e5a9033a895c5d43bbb4b143fbc74ba, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6d1e7c5b299647d4b99110b520b6ab52, type: 2}
     - target: {fileID: 919132149155446097, guid: 2e5a9033a895c5d43bbb4b143fbc74ba, type: 3}
       propertyPath: m_Name
       value: CharacterFBX_QUAT
       objectReference: {fileID: 0}
+    - target: {fileID: 5797384429611982230, guid: 2e5a9033a895c5d43bbb4b143fbc74ba, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6d1e7c5b299647d4b99110b520b6ab52, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
