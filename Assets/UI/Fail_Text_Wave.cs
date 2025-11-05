@@ -36,7 +36,7 @@ public class WavyText : MonoBehaviour
             for (int j = 0; j < 4; j++)
             {
                 Vector3 orig = vertices[vertexIndex + j];
-                float wave = Mathf.Sin(Time.time * frequency + i * waveSpacing) * amplitude;
+                float wave = Mathf.Sin(Time.time * frequency - i * waveSpacing) * amplitude;
                 vertices[vertexIndex + j] = orig + new Vector3(0, wave, 0);
             }
         }
