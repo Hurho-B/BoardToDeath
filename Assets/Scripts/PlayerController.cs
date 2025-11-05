@@ -97,7 +97,7 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        //m_rigidbody.maxLinearVelocity = 15f;
     }
 
     // Update is called once per frame
@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour
 
         SetState();
         ApplyGravity();
-        AcceleratePlayer(baseCruiseSpeed * ollieSpeedMult);
+        //AcceleratePlayer(baseCruiseSpeed * ollieSpeedMult);
         TurnPlayer();
     }
 
@@ -157,7 +157,7 @@ public class PlayerController : MonoBehaviour
 
         // If player is moving backwards, acceleration is increased to 
         // better counteract that.
-        if (transform.forward.x < 0.0f)
+        if (transform.forward.z < 0.0f)
         {
             doubleAcceleration = 2;
         }
