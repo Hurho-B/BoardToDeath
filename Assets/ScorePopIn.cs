@@ -83,7 +83,7 @@ public class ScorePopIn : MonoBehaviour
             float t = elapsed / rattleDuration;
             float intensity = rattleIntensity * (1f - t);
 
-            // Random jitter offsets
+            
             float offsetX = Mathf.Sin(Time.time * rattleFrequency) * intensity * Random.Range(0.5f, 1f);
             float offsetY = Mathf.Cos(Time.time * rattleFrequency * 1.3f) * intensity * Random.Range(0.5f, 1f);
 
@@ -95,7 +95,7 @@ public class ScorePopIn : MonoBehaviour
         transform.localPosition = originalPos;
     }
 
-    // Optional: call this from elsewhere to replay the effect
+    
     public void Play()
     {
         StopAllCoroutines();

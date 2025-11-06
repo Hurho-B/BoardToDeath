@@ -1,93 +1,139 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using System.Collections;
 using TMPro;
+using System.Collections;
 
-[RequireComponent(typeof(Button))]
 public class UIButtonHoverColorInvert : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("References")]
-    public TMP_Text buttonText; // assign your TMP text in inspector
+    public TMP_Text buttonText;
 
     [Header("Scale Settings")]
+    public float normalScale = 1f;
     public float hoverScale = 1.1f;
-    public float scaleSpeed = 8f;
+    public float scaleSpeed = 6f;
+    public float breathingAmplitude = 0.05f;
+    public float breathingSpeed = 2f;
 
-    private Vector3 originalScale;
-    private Coroutine scaleRoutine;
+    [Header("Color Settings")]
+    public Color normalFaceColor = Color.white;
+    public Color normalOutlineColor = Color.black;
+    public float colorPulseStrength = 0.08f; 
 
-    private Color originalFaceColor;
-    private Color originalOutlineColor;
+    private bool isHovering = false;
+    private Coroutine breathingRoutine;
+    private float breathingTimer = 0f;
 
-    private bool isHovered = false;
+    private Material buttonMaterial;
+    private Color invertedFaceColor;
+    private Color invertedOutlineColor;
+    private Color currentFaceColor;
+    private Color currentOutlineColor;
+
+    private void Reset()
+    {
+        buttonText = GetComponentInChildren<TMP_Text>();
+    }
 
     void Start()
     {
-        originalScale = transform.localScale;
-
         if (buttonText == null)
             buttonText = GetComponentInChildren<TMP_Text>();
 
-        // IMPORTANT: create a unique material instance for this text so we can modify it independently
-        buttonText.fontMaterial = new Material(buttonText.fontMaterial);
+        // Create unique material instance
+        buttonMaterial = buttonText.fontMaterial;
 
-        // Cache original colors
-        originalFaceColor = buttonText.color;
-        originalOutlineColor = buttonText.fontMaterial.GetColor(ShaderUtilities.ID_OutlineColor);
+        // Store inverted colors
+        invertedFaceColor = normalOutlineColor;
+        invertedOutlineColor = normalFaceColor;
+
+        // Initial appearance
+        SetTMPColors(normalFaceColor, normalOutlineColor);
+        transform.localScale = Vector3.one * normalScale;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        isHovered = true;
-        StartScaleTo(originalScale * hoverScale);
-        InvertTextColors();
+        isHovering = true;
+
+        // Invert colors
+        currentFaceColor = invertedFaceColor;
+        currentOutlineColor = invertedOutlineColor;
+        SetTMPColors(currentFaceColor, currentOutlineColor);
+
+        // Start breathing
+        if (breathingRoutine != null)
+            StopCoroutine(breathingRoutine);
+        breathingRoutine = StartCoroutine(BreathingEffect());
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        isHovered = false;
-        StartScaleTo(originalScale);
-        RestoreOriginalColors();
+        isHovering = false;
+
+        // Restore colors
+        currentFaceColor = normalFaceColor;
+        currentOutlineColor = normalOutlineColor;
+        SetTMPColors(currentFaceColor, currentOutlineColor);
+
+        // Stop breathing, return to normal
+        if (breathingRoutine != null)
+            StopCoroutine(breathingRoutine);
+        StartCoroutine(ReturnToNormalScale());
     }
 
-    private void StartScaleTo(Vector3 target)
+    private void SetTMPColors(Color face, Color outline)
     {
-        if (scaleRoutine != null) StopCoroutine(scaleRoutine);
-        scaleRoutine = StartCoroutine(ScaleRoutine(target));
+        if (buttonMaterial == null)
+            buttonMaterial = buttonText.fontMaterial;
+
+        buttonMaterial.SetColor(ShaderUtilities.ID_FaceColor, face);
+        buttonMaterial.SetColor(ShaderUtilities.ID_OutlineColor, outline);
+        buttonText.UpdateMeshPadding();
+        buttonText.SetMaterialDirty();
     }
 
-    private IEnumerator ScaleRoutine(Vector3 target)
+    private IEnumerator BreathingEffect()
     {
-        while (Vector3.Distance(transform.localScale, target) > 0.001f)
+        breathingTimer = 0f;
+
+        while (isHovering)
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, target, Time.deltaTime * scaleSpeed);
+            breathingTimer += Time.deltaTime * breathingSpeed;
+
+            // Breathing scale
+            float scaleOffset = Mathf.Sin(breathingTimer) * breathingAmplitude;
+            float currentScale = hoverScale + scaleOffset;
+            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one * currentScale, Time.deltaTime * scaleSpeed);
+
+            // Neon pulse for both face and outline
+            float pulse = (Mathf.Sin(breathingTimer) + 1f) * 0.5f; // 0–1
+            float brightness = Mathf.Lerp(1f - colorPulseStrength, 1f + colorPulseStrength, pulse);
+
+            Color pulsedFace = currentFaceColor * brightness;
+            Color pulsedOutline = currentOutlineColor * brightness;
+
+            SetTMPColors(pulsedFace, pulsedOutline);
+
             yield return null;
         }
-        transform.localScale = target;
     }
 
-    private void InvertTextColors()
+    private IEnumerator ReturnToNormalScale()
     {
-        // Invert face color (white <-> black)
-        Color invertedFace = InvertColor(originalFaceColor);
-        buttonText.color = invertedFace;
+        while (!isHovering && Vector3.Distance(transform.localScale, Vector3.one * normalScale) > 0.001f)
+        {
+            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one * normalScale, Time.deltaTime * scaleSpeed);
+            yield return null;
+        }
 
-        // Invert outline color (black <-> white)
-        Color invertedOutline = InvertColor(originalOutlineColor);
-        buttonText.fontMaterial.SetColor(ShaderUtilities.ID_OutlineColor, invertedOutline);
-    }
-
-    private void RestoreOriginalColors()
-    {
-        buttonText.color = originalFaceColor;
-        buttonText.fontMaterial.SetColor(ShaderUtilities.ID_OutlineColor, originalOutlineColor);
-    }
-
-    private Color InvertColor(Color color)
-    {
-        return new Color(1f - color.r, 1f - color.g, 1f - color.b, color.a);
+        transform.localScale = Vector3.one * normalScale;
     }
 }
+
+
+
+
+
 
 

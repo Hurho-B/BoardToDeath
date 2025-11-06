@@ -9,9 +9,9 @@ public class WavyText : MonoBehaviour
     private Vector3[] vertices;
 
     [Header("Wave Settings")]
-    [SerializeField] private float amplitude = 5f;    // How high each letter moves
-    [SerializeField] private float frequency = 3f;    // How fast the wave oscillates
-    [SerializeField] private float waveSpacing = 0.3f; // How far apart letters are in the wave pattern
+    [SerializeField] private float amplitude = 5f;    
+    [SerializeField] private float frequency = 3f;    
+    [SerializeField] private float waveSpacing = 0.3f; 
 
     void Awake()
     {

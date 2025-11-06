@@ -67,7 +67,7 @@ public class ButtonTextShake : MonoBehaviour
             yield return null;
         }
 
-        tmpText.ForceMeshUpdate(); // reset text back to normal
+        tmpText.ForceMeshUpdate(); 
         shakeRoutine = null;
     }
 }

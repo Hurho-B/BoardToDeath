@@ -7,7 +7,7 @@ using System.Collections;
 public class UIButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("References")]
-    public ButtonTextShake textShake;  // Assign the TMP text child in Inspector
+    public ButtonTextShake textShake;  
 
     [Header("Scale Settings")]
     public float hoverScale = 1.1f;
