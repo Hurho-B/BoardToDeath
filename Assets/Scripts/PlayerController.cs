@@ -224,12 +224,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void PerformingGrab()
+    public void PerformingGrab()
     {
         // Some lil air thing where you grab da board
     }
 
-    void PerformingKickflip()
+    public void PerformingKickflip()
     {
         // Some lil air thing where you grab da board
     }

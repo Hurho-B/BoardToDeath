@@ -6,7 +6,15 @@ public class SurfaceAlignment : MonoBehaviour
     // luckily it's only 4 points, located at each wheel
     public Transform[] wheelContacts = new Transform[4];
     public Vector3[] checkedNormals = new Vector3[4];
+    // public bool[] 
 
+    private bool isStable;
+    private bool isAirborne;
+
+    // Depending on the angle of the board, the board is either in a stable
+    // state or an unstable state. The state the board is in will affect
+    // what rotation it attempts to take once airborne.
+    
     private void Update()
     {
         FetchWheelNormals();

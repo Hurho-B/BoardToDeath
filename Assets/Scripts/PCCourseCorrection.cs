@@ -15,6 +15,7 @@ public class PCCourseCorrection : MonoBehaviour
     public float fallingCorrection;
 
     private PlayerController pc_master;
+    private SurfaceAlignment pc_gravity;
     private Rigidbody m_rigidbody;
     private bool isFalling;
     private float currentSpeed;
@@ -24,9 +25,10 @@ public class PCCourseCorrection : MonoBehaviour
     {
         m_rigidbody = GetComponent<Rigidbody>();
         pc_master = GetComponent<PlayerController>();
+        pc_gravity = GetComponent<SurfaceAlignment>();
     }
 
-    public void Update()
+    private void Update()
     {
         // Takes the world-space linear velocity and converts it
         // into a relative-space linear velocity.
