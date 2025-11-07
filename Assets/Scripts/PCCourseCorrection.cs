@@ -41,12 +41,13 @@ public class PCCourseCorrection : MonoBehaviour
     }
 
     // If the player is drifting, such as when performing a turn, apply a force
-    // relative to the strength of the drifting.  
+    // relative to the strength of the drifting. Redirects corrected force forward.
     public void DriftCorrection()
     {
         if (driftVelocity.x < 1f || driftVelocity.x > 1f)
         {
             m_rigidbody.AddForce(transform.right * (-driftVelocity.x * driftingCorrection), ForceMode.Force);
+            m_rigidbody.AddForce(transform.forward * (Mathf.Sign(driftVelocity.x) * driftingCorrection), ForceMode.Force);
         }
     }
 

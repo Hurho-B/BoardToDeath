@@ -25,14 +25,14 @@ public class PlayerController : MonoBehaviour
 
     // Declaring states
     public bool isOnGround = true;
-    public bool tiltingLeft;
-    public bool tiltingRight;
-    public bool doingSquat;
-    public bool doingJump;
-    public bool doingGrab;
-    public bool doingKickflip;
-    public bool doingManual;
-    public bool doingRailGrind;
+    private bool tiltingLeft;
+    private bool tiltingRight;
+    private bool doingSquat;
+    private bool doingJump;
+    private bool doingGrab;
+    private bool doingKickflip;
+    private bool doingManual;
+    private bool doingRailGrind;
 
     [Header("Physics Values")]
     [Tooltip("Base speed the player will adjust towards.")]
@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour
 
         SetState();
         ApplyGravity();
-        //AcceleratePlayer(baseCruiseSpeed * ollieSpeedMult);
+        AcceleratePlayer(baseCruiseSpeed * ollieSpeedMult);
         TurnPlayer();
     }
 

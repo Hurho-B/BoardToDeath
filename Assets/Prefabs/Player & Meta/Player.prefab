@@ -243,7 +243,8 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
-  stabilityThreshold: 45
+  stabilityThreshold1: 0
+  stabilityThreshold2: 0
 --- !u!114 &5372895922706163029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,7 +258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   driftVelocity: {x: 0, y: 0, z: 0}
-  driftingCorrection: 0.5
+  driftingCorrection: 0.745
   backwardsCorrection: 1
   fallingCorrection: 0.5
 --- !u!1 &5404024583385970435
