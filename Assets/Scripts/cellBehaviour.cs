@@ -42,9 +42,9 @@ public class CellBehaviour : MonoBehaviour
         // We only need to rotate the gameobject if we got a
         // hit in the previous checks
         while (numOfRotations > 0)
-            { 
+        { 
             transform.Rotate(Vector3.up, 90 * numOfRotations); 
             Debug.Log("Rotation");
-            }
+        }
     }
 }
