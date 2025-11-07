@@ -106,6 +106,7 @@ GameObject:
   - component: {fileID: 225529615846288152}
   - component: {fileID: 5362614971281846555}
   - component: {fileID: 6797264584768036165}
+  - component: {fileID: 5372895922706163029}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -207,7 +208,7 @@ MonoBehaviour:
   doingKickflip: 0
   doingManual: 0
   doingRailGrind: 0
-  baseCruiseSpeed: 10
+  baseCruiseSpeed: 5
   baseRotateSpeed: 90
   gravity: 9.8
   whatIsGround:
@@ -242,6 +243,22 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
+--- !u!114 &5372895922706163029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5050669956948589875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3234f7dcb870f517bf3df9717f641b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  driftVelocity: {x: 0, y: 0, z: 0}
+  driftingCorrection: 0.5
+  backwardsCorrection: 1
+  fallingCorrection: 0.5
 --- !u!1 &5404024583385970435
 GameObject:
   m_ObjectHideFlags: 0

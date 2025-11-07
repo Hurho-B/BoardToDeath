@@ -9,6 +9,14 @@ public class CellBehaviour : MonoBehaviour
     public bool southCantFaceEdge;
     public bool westCantFaceEdge;
 
+    [SerializeField] GameObject[] spawnPoints;
+
+    void Start()
+    {
+        //Looks for any Game Objects in the scene with the required tag
+        spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+    }
+
     // Never  Eat   Soggy  Waffles
     // North, East, South, West
     // 0      1     2      3
@@ -33,7 +41,10 @@ public class CellBehaviour : MonoBehaviour
         { numOfRotations += 1; }
         // We only need to rotate the gameobject if we got a
         // hit in the previous checks
-        if (numOfRotations > 0)
-        { transform.Rotate(Vector3.up, 90 * numOfRotations); }
+        while (numOfRotations > 0)
+        { 
+            transform.Rotate(Vector3.up, 90 * numOfRotations); 
+            Debug.Log("Rotation");
+        }
     }
 }

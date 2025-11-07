@@ -153,22 +153,18 @@ public class PlayerController : MonoBehaviour
 
     public void AcceleratePlayer(float targetSpeed)
     {
-        int doubleAcceleration = 1;
-
-        // If player is moving backwards, acceleration is increased to 
-        // better counteract that.
-        if (transform.forward.z < 0.0f)
-        {
-            doubleAcceleration = 2;
-        }
-
         if (currentSpeed > targetSpeed + 0.2)
             currentSpeed -= targetSpeed * Time.deltaTime;
         else if (currentSpeed < targetSpeed - 0.2)
             currentSpeed += targetSpeed * Time.deltaTime;
         else
             currentSpeed = targetSpeed;
-        m_rigidbody.AddForce(transform.forward * (currentSpeed * doubleAcceleration), ForceMode.Force);
+        m_rigidbody.AddForce(transform.forward * currentSpeed, ForceMode.Force);
+    }
+
+    public float GetCurrentSpeed()
+    {
+        return currentSpeed;
     }
 
     public void TurnPlayer()
