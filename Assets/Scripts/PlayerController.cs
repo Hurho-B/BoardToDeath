@@ -18,21 +18,21 @@ public class PlayerController : MonoBehaviour
     // Grabbing components and data
     private Vector2 m_moveAmt;
     private Vector2 m_lookAmt;
-    private Animator m_animator;
+    public Animator m_animator;
     private Rigidbody m_rigidbody;
     private Transform m_playerModel;
     private Transform currentRail;
 
     // Declaring states
     public bool isOnGround = true;
-    public bool tiltingLeft;
-    public bool tiltingRight;
-    public bool doingSquat;
-    public bool doingJump;
-    public bool doingGrab;
-    public bool doingKickflip;
-    public bool doingManual;
-    public bool doingRailGrind;
+    private bool tiltingLeft;
+    private bool tiltingRight;
+    private bool doingSquat;
+    private bool doingJump;
+    private bool doingGrab;
+    private bool doingKickflip;
+    private bool doingManual;
+    private bool doingRailGrind;
 
     [Header("Physics Values")]
     [Tooltip("Base speed the player will adjust towards.")]
@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Base degrees per second the player will spin..")]
     public float baseRotateSpeed = 5;
     [Tooltip("The rate per second the player will fall at.")]
-    private float gravity = 9.8f;
+    public float gravity = 9.8f;
     [Tooltip("The tag that an object must have to be considered ground.")]
     public LayerMask whatIsGround;
 
@@ -84,12 +84,12 @@ public class PlayerController : MonoBehaviour
     {
         m_moveAction = InputSystem.actions.FindAction("Move");
         m_lookAction = InputSystem.actions.FindAction("Look");
-        m_ollieAction = InputSystem.actions.FindAction("Jump");
+        m_ollieAction = InputSystem.actions.FindAction("Ollie");
         m_brakeAction = InputSystem.actions.FindAction("Brake");
         m_manualAction = InputSystem.actions.FindAction("Manual");
         m_kickflipAction = InputSystem.actions.FindAction("Manual");
 
-        m_animator = GetComponent<Animator>();
+        // m_animator = GetComponent<Animator>();
         m_rigidbody = GetComponent<Rigidbody>();
         m_rigidbody.freezeRotation = true;
     }
@@ -97,7 +97,7 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        //m_rigidbody.maxLinearVelocity = 15f;
     }
 
     // Update is called once per frame
@@ -148,7 +148,7 @@ public class PlayerController : MonoBehaviour
             currentGravity = 0.0f;
         else if (currentGravity < gravity)
             currentGravity += gravity * Time.deltaTime;
-        m_rigidbody.AddForce(Physics.gravity * currentGravity, ForceMode.Force);
+        m_rigidbody.AddForce(Vector3.down * currentGravity, ForceMode.Force);
     }
 
     public void AcceleratePlayer(float targetSpeed)
@@ -159,9 +159,12 @@ public class PlayerController : MonoBehaviour
             currentSpeed += targetSpeed * Time.deltaTime;
         else
             currentSpeed = targetSpeed;
-        // transform.position += transform.forward * currentSpeed * Time.deltaTime;
-        // transform.Translate(transform.forward * currentSpeed * Time.deltaTime);
         m_rigidbody.AddForce(transform.forward * currentSpeed, ForceMode.Force);
+    }
+
+    public float GetCurrentSpeed()
+    {
+        return currentSpeed;
     }
 
     public void TurnPlayer()
@@ -221,6 +224,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void PerformingGrab()
+    {
+        // Some lil air thing where you grab da board
+    }
+
+    public void PerformingKickflip()
+    {
+        // Some lil air thing where you grab da board
+    }
+
     public void SetState()
     {
         m_animator.SetFloat("Speed", currentSpeed);
@@ -230,11 +243,6 @@ public class PlayerController : MonoBehaviour
         m_animator.SetBool("TiltingRight", tiltingRight);
 
         m_animator.SetBool("DoingManual", doingManual);
-    }
-
-    void Grab()
-    {
-        // Some lil air thing where you grab da board
     }
 
     private void OnTriggerEnter(Collider other)
