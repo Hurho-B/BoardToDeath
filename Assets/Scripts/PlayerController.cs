@@ -89,7 +89,6 @@ public class PlayerController : MonoBehaviour
         m_manualAction = InputSystem.actions.FindAction("Manual");
         m_kickflipAction = InputSystem.actions.FindAction("Manual");
 
-        // m_animator = GetComponent<Animator>();
         m_rigidbody = GetComponent<Rigidbody>();
         m_rigidbody.freezeRotation = true;
     }
@@ -121,22 +120,21 @@ public class PlayerController : MonoBehaviour
             m_animator.SetBool("kick", doingKickflip);
         }
 
-        SetState();
-        ApplyGravity();
-        AcceleratePlayer(baseCruiseSpeed * ollieSpeedMult);
-        TurnPlayer();
-    }
-
-    public void CheckIfOnGround()
-    {
-        RaycastHit hit;
-        //                  origin              direction     hitinfo  MaxDistance
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.17f))
+        if (!doingRailGrind)
         {
-            Vector3 surfaceNormal = hit.normal; //stores normals of surface hit by raycast
-            Quaternion targetRotation = Quaternion.FromToRotation(transform.up, surfaceNormal) * transform.rotation;
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10);
+            ApplyGravity();
         }
+
+        if (m_moveAction.IsPressed() && m_moveAmt.x < 0)
+        {
+            AcceleratePlayer(0f);
+        }
+        else
+        {
+            AcceleratePlayer(baseCruiseSpeed * ollieSpeedMult);
+        }
+        SetState();
+        TurnPlayer();
     }
 
     public void ApplyGravity()
@@ -251,8 +249,11 @@ public class PlayerController : MonoBehaviour
         {
             gameObject.transform.position = other.transform.position;
             doingRailGrind = true;
-            m_rigidbody.useGravity = false;
             doingJump = false;
+
+            // Disable gravity calcs when rail griding
+            m_rigidbody.useGravity = false;
+
             m_animator.SetBool("isJumping", doingJump);
             currentRail = other.transform;
             Debug.Log("Player entered a rail!");
@@ -265,6 +266,8 @@ public class PlayerController : MonoBehaviour
         {
             doingRailGrind = false;
             currentRail = null;
+
+            // Reenable gravity calcs when railgrinding
             m_rigidbody.useGravity = true;
             Debug.Log("Player left the rail!");
         }
