@@ -8,7 +8,7 @@ public class MusicHandler : MonoBehaviour
 
     public int songIndex = 0;
 
-    public bool shouldPlayMusic = false;
+    public bool shouldPlayMusic = true;
 
     void Start()
     {
