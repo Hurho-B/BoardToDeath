@@ -8,9 +8,9 @@ public class UserInterfaceManager : MonoBehaviour
     public GameObject pauseMenu;
     public GameObject settingsMenu;
 
-    bool start;
-    bool pause;
-    bool settings;
+    public bool start;
+    public bool pause;
+    public bool settings;
 
     private void Awake()
     {
@@ -55,17 +55,58 @@ public class UserInterfaceManager : MonoBehaviour
 
         SceneManager.LoadScene("ShowcaseLevel");
     }
+
+    public void Restart()
+    {
+        pauseMenu.SetActive(false);
+        pause = false;
+
+        SceneManager.LoadScene("ShowcaseLevel");
+        Time.timeScale = 1;
+    }
+
     public void OpenSettings()
     {
-        startMenu.SetActive(false);
-        start = false;
         settingsMenu.SetActive(true);
         settings = true;
+
+        if (SceneManager.GetActiveScene().name == "StartZone")
+        {
+            startMenu.SetActive(false);
+            start = false;
+        }
+        else
+        {
+            pauseMenu.SetActive(false);
+            pause = false;
+        }
     }
 
     public void QuitGame()
     {
-        Application.Quit();
+        #if UNITY_STANDALONE
+                Application.Quit();
+        #endif
+        #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+        #endif
+    }
+
+    public void Back()
+    {
+        settingsMenu.SetActive(false);
+        settings = false;
+
+        if (SceneManager.GetActiveScene().name == "StartZone")
+        {
+            startMenu.SetActive(true);
+            start = true;
+        }
+        else
+        {
+            pauseMenu.SetActive(true);
+            pause = true;
+        }
     }
 
     public void BackToStart()
@@ -74,5 +115,4 @@ public class UserInterfaceManager : MonoBehaviour
         Time.timeScale = 1;
         Destroy(gameObject);
     }
-
 }
