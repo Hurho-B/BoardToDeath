@@ -11,9 +11,14 @@ public class PlayerController : MonoBehaviour
     private InputAction m_moveAction;
     private InputAction m_lookAction;
     private InputAction m_ollieAction;
-    private InputAction m_brakeAction;
     private InputAction m_manualAction;
+    private InputAction m_grabAction;
     private InputAction m_kickflipAction;
+
+    private InputAction m_tricksUp;
+    private InputAction m_tricksRight;
+    private InputAction m_tricksDown;
+    private InputAction m_tricksLeft;
 
     // Grabbing components and data
     private Vector2 m_moveAmt;
@@ -33,6 +38,11 @@ public class PlayerController : MonoBehaviour
     private bool doingKickflip;
     private bool doingManual;
     private bool doingRailGrind;
+
+    private bool doingTrick1;
+    private bool doingTrick2;
+    private bool doingTrick3;
+    private bool doingTrick4;
 
     [Header("Physics Values")]
     [Tooltip("Base speed the player will adjust towards.")]
@@ -84,10 +94,16 @@ public class PlayerController : MonoBehaviour
     {
         m_moveAction = InputSystem.actions.FindAction("Move");
         m_lookAction = InputSystem.actions.FindAction("Look");
+
         m_ollieAction = InputSystem.actions.FindAction("Ollie");
-        m_brakeAction = InputSystem.actions.FindAction("Brake");
         m_manualAction = InputSystem.actions.FindAction("Manual");
         m_kickflipAction = InputSystem.actions.FindAction("Manual");
+        m_grabAction = InputSystem.actions.FindAction("Manual");
+
+        m_tricksUp = InputSystem.actions.FindAction("Trick Up");
+        m_tricksRight = InputSystem.actions.FindAction("Trick Right");
+        m_tricksDown = InputSystem.actions.FindAction("Trick Down");
+        m_tricksLeft = InputSystem.actions.FindAction("Trick Left");
 
         m_rigidbody = GetComponent<Rigidbody>();
         m_rigidbody.freezeRotation = true;
@@ -105,36 +121,44 @@ public class PlayerController : MonoBehaviour
     {
         m_moveAmt = m_moveAction.ReadValue<Vector2>();
         m_lookAmt = m_moveAction.ReadValue<Vector2>();
-        isOnGround = Physics.Raycast(transform.position, Vector3.down, 0.2f, whatIsGround);
+        GroundCheck();
 
-        PerformingOllie();
-
-        if (m_manualAction.WasPressedThisFrame() && isOnGround)
-        {
+        // Run a series of checks to see what trick input was made.
+        if ((m_ollieAction.IsPressed() || m_ollieAction.WasReleasedThisFrame()) && isOnGround)
+            PerformingOllie();
+        else if (m_kickflipAction.WasPressedThisFrame() && !isOnGround)
+            PerformingKickflip();
+        else if (m_grabAction.WasPressedThisFrame() && !isOnGround)
+            PerformingGrab();
+        else if (m_manualAction.WasPressedThisFrame() && isOnGround)
             PerformingManual();
-        }
-
-        if (m_kickflipAction.WasPressedThisFrame() && !isOnGround)
-        {
-            doingKickflip = true;
-            m_animator.SetBool("kick", doingKickflip);
-        }
-
+        // Next, check to see what physics should be applied.
         if (!doingRailGrind)
-        {
             ApplyGravity();
-        }
-
         if (m_moveAction.IsPressed() && m_moveAmt.x < 0)
+            AcceleratePlayer(0f); // This isn't working, set dedicated key to start braking?
+        else
+        AcceleratePlayer(baseCruiseSpeed * ollieSpeedMult);
+        if (m_moveAction.IsPressed() && m_moveAmt.x != 0)
+            TurnPlayer();
+        // Finally, perform tertiary checks and declare the animation state.
+        GrabTrickVariant();
+        SetState();
+    }
+
+    public void GroundCheck()
+    {
+        isOnGround = Physics.Raycast(transform.position, Vector3.down, 0.2f, whatIsGround);
+        if (isOnGround)
         {
-            AcceleratePlayer(0f);
+            doingGrab = false;
+            doingKickflip = false;
         }
         else
         {
-            AcceleratePlayer(baseCruiseSpeed * ollieSpeedMult);
+            doingSquat = false;
+            doingManual = false;
         }
-        SetState();
-        TurnPlayer();
     }
 
     public void ApplyGravity()
@@ -167,16 +191,11 @@ public class PlayerController : MonoBehaviour
 
     public void TurnPlayer()
     {
-        // Vector3 currentVelocity = m_rigidbody.linearVelocity;
-
-        if (m_moveAction.IsPressed())
-        {
-            Quaternion deltaRotation = Quaternion.Euler(new Vector3(0, baseRotateSpeed, 0) * m_moveAmt.x * Time.deltaTime);
-            m_rigidbody.MoveRotation(m_rigidbody.rotation * deltaRotation);
-        }
+        Quaternion deltaRotation = Quaternion.Euler(new Vector3(0, baseRotateSpeed, 0) * m_moveAmt.x * Time.deltaTime);
+        m_rigidbody.MoveRotation(m_rigidbody.rotation * deltaRotation);
     }
 
-    void PerformingOllie()
+    public void PerformingOllie()
     {
         if (m_ollieAction.WasPressedThisFrame())
         {
@@ -210,12 +229,12 @@ public class PlayerController : MonoBehaviour
 
     public void PerformingManual()
     {
-        if (isOnGround && !doingManual)
+        if (!doingManual)
         {
             doingManual = true;
             // sliderScript.ToggleManual(doingManual);
         }
-        else if (isOnGround && doingManual)
+        else if (doingManual)
         {
             doingManual = false;
             // sliderScript.ToggleManual(doingManual);
@@ -224,23 +243,67 @@ public class PlayerController : MonoBehaviour
 
     public void PerformingGrab()
     {
-        // Some lil air thing where you grab da board
+        doingGrab = true;
+        doingKickflip = false;
     }
 
     public void PerformingKickflip()
     {
-        // Some lil air thing where you grab da board
+        doingGrab = false;
+        doingKickflip = true;
+    }
+
+    public void GrabTrickVariant()
+    {
+        if (m_tricksUp.WasPressedThisFrame())
+        {
+            doingTrick1 = true;
+            doingTrick2 = false;
+            doingTrick3 = false;
+            doingTrick4 = false;
+        }
+        else if (m_tricksRight.WasPressedThisFrame())
+        {
+            doingTrick1 = false;
+            doingTrick2 = true;
+            doingTrick3 = false;
+            doingTrick4 = false;
+        }
+        else if (m_tricksDown.WasPressedThisFrame())
+        {
+            doingTrick1 = false;
+            doingTrick2 = false;
+            doingTrick3 = true;
+            doingTrick4 = false;
+        }
+        else if (m_tricksLeft.WasPressedThisFrame())
+        {
+            doingTrick1 = false;
+            doingTrick2 = false;
+            doingTrick3 = false;
+            doingTrick4 = true;
+        }
     }
 
     public void SetState()
     {
+        // Variables related to basic movement
         m_animator.SetFloat("Speed", currentSpeed);
-        m_animator.SetBool("DoSquat", doingSquat);
-        m_animator.SetBool("IsGrounded", isOnGround);
         m_animator.SetBool("TiltingLeft", tiltingLeft);
         m_animator.SetBool("TiltingRight", tiltingRight);
 
+        // Variables related to active actions
+        m_animator.SetBool("DoSquat", doingSquat);
+        m_animator.SetBool("IsGrounded", isOnGround);
         m_animator.SetBool("DoingManual", doingManual);
+        m_animator.SetBool("DoingGrab", doingGrab);
+        m_animator.SetBool("DoingKickflip", doingKickflip);
+
+        // Variables related to different tricks
+        m_animator.SetBool("DoingTrick1", doingTrick1);
+        m_animator.SetBool("DoingTrick2", doingTrick2);
+        m_animator.SetBool("DoingTrick3", doingTrick3);
+        m_animator.SetBool("DoingTrick4", doingTrick4);
     }
 
     private void OnTriggerEnter(Collider other)
