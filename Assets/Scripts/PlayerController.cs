@@ -100,10 +100,10 @@ public class PlayerController : MonoBehaviour
         m_kickflipAction = InputSystem.actions.FindAction("Manual");
         m_grabAction = InputSystem.actions.FindAction("Manual");
 
-        m_tricksUp = InputSystem.actions.FindAction("Tricks Up");
-        m_tricksRight = InputSystem.actions.FindAction("Tricks Right");
-        m_tricksDown = InputSystem.actions.FindAction("Tricks Down");
-        m_tricksLeft = InputSystem.actions.FindAction("Tricks Left");
+        m_tricksUp = InputSystem.actions.FindAction("Trick Up");
+        m_tricksRight = InputSystem.actions.FindAction("Trick Right");
+        m_tricksDown = InputSystem.actions.FindAction("Trick Down");
+        m_tricksLeft = InputSystem.actions.FindAction("Trick Left");
 
         m_rigidbody = GetComponent<Rigidbody>();
         m_rigidbody.freezeRotation = true;
@@ -116,15 +116,15 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    // void FixedUpdate()
+    void Update()
     {
         m_moveAmt = m_moveAction.ReadValue<Vector2>();
         m_lookAmt = m_moveAction.ReadValue<Vector2>();
-
-        isOnGround = Physics.Raycast(transform.position, Vector3.down, 0.2f, whatIsGround);
+        GroundCheck();
 
         // Run a series of checks to see what trick input was made.
-        if (m_ollieAction.IsPressed() && isOnGround)
+        if ((m_ollieAction.IsPressed() || m_ollieAction.WasReleasedThisFrame()) && isOnGround)
             PerformingOllie();
         else if (m_kickflipAction.WasPressedThisFrame() && !isOnGround)
             PerformingKickflip();
@@ -135,15 +135,30 @@ public class PlayerController : MonoBehaviour
         // Next, check to see what physics should be applied.
         if (!doingRailGrind)
             ApplyGravity();
-        if (m_moveAction.IsPressed())
-            TurnPlayer();
         if (m_moveAction.IsPressed() && m_moveAmt.x < 0)
-            AcceleratePlayer(0f);
+            AcceleratePlayer(0f); // This isn't working, set dedicated key to start braking?
         else
-            AcceleratePlayer(baseCruiseSpeed * ollieSpeedMult);
+        AcceleratePlayer(baseCruiseSpeed * ollieSpeedMult);
+        if (m_moveAction.IsPressed() && m_moveAmt.x != 0)
+            TurnPlayer();
         // Finally, perform tertiary checks and declare the animation state.
         GrabTrickVariant();
         SetState();
+    }
+
+    public void GroundCheck()
+    {
+        isOnGround = Physics.Raycast(transform.position, Vector3.down, 0.2f, whatIsGround);
+        if (isOnGround)
+        {
+            doingGrab = false;
+            doingKickflip = false;
+        }
+        else
+        {
+            doingSquat = false;
+            doingManual = false;
+        }
     }
 
     public void ApplyGravity()
@@ -247,21 +262,21 @@ public class PlayerController : MonoBehaviour
             doingTrick3 = false;
             doingTrick4 = false;
         }
-        else if (m_tricksUp.WasPressedThisFrame())
+        else if (m_tricksRight.WasPressedThisFrame())
         {
             doingTrick1 = false;
             doingTrick2 = true;
             doingTrick3 = false;
             doingTrick4 = false;
         }
-        else if (m_tricksUp.WasPressedThisFrame())
+        else if (m_tricksDown.WasPressedThisFrame())
         {
             doingTrick1 = false;
             doingTrick2 = false;
             doingTrick3 = true;
             doingTrick4 = false;
         }
-        else if (m_tricksUp.WasPressedThisFrame())
+        else if (m_tricksLeft.WasPressedThisFrame())
         {
             doingTrick1 = false;
             doingTrick2 = false;
