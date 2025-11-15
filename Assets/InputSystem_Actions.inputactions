@@ -25,6 +25,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Tricks",
+                    "type": "Value",
+                    "id": "6274fdae-739b-4071-a369-e00632d4480b",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Interact/Grab",
                     "type": "Button",
                     "id": "6c2ab1b8-8984-453a-af3d-a3c78ae1679a",
@@ -91,6 +100,42 @@
                     "name": "Trick Variations",
                     "type": "Button",
                     "id": "f29a4e50-cae1-4dca-99f9-b65781c2f61b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Trick Up",
+                    "type": "Button",
+                    "id": "061c7965-43c5-4061-90b3-3b07b4018251",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Trick Right",
+                    "type": "Button",
+                    "id": "b03c6b1f-06a2-46de-90b3-ff56b7219c78",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Trick Down",
+                    "type": "Button",
+                    "id": "3a9381e7-3ae0-4344-b552-d1f1f981e1bf",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Trick Left",
+                    "type": "Button",
+                    "id": "c7942932-09b9-41cc-b914-fab031d6eee3",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -513,6 +558,61 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Trick Variations",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6c2cc455-866c-4170-bd8c-fd73a10501c2",
+                    "path": "<Gamepad>/dpad",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Tricks",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1f62fd3e-0fd3-48ac-8e6d-0ff55c2e341e",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Trick Up",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4ae6bb55-16fd-4e6c-aae8-c41ed25387ee",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Trick Right",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a9a998d4-84d4-42a2-ae58-679a24ca6059",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Trick Down",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "348b7196-acd5-45e3-bd2d-b78fbf9074a8",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Trick Left",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
